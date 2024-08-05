@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
 
+
+
 function AddInventory() {
   const [productCategory, setProductCategory] = useState("");
 
@@ -28,7 +30,7 @@ function AddInventory() {
           width: `calc(100% - ${drawerWidth}px)`,
         }}
       >
-        <h2>Add Stock levels</h2>
+        <h2>Add Stock levels csuomter </h2>
         <Box className="container">
           <TextField
             id="date-picker"
