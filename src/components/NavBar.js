@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -7,9 +7,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Toolbar from "@mui/material/Toolbar";
-import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -18,23 +17,45 @@ import techSLlogo from "../pictures/Logo.png";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
-  const drawer = (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <Box
+const NavBar = () => {
+  const drawerItems = [
+    { text: "Inventory", icon: <InventoryIcon /> },
+    { text: "Add Inventory", icon: <LaptopMacIcon /> },
+    { text: "Customers", icon: <PersonIcon /> },
+    { text: "Orders", icon: <ShoppingCartOutlinedIcon /> },
+  ];
+
+  const settingsItems = [
+    { text: "Settings", icon: <SettingsIcon /> },
+    { text: "Log out", icon: <LogoutIcon /> },
+  ];
+
+  return (
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <Drawer
+        variant="permanent"
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          p: 2,
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+          },
         }}
+        open
       >
-        <img src={techSLlogo} alt="TechSL Logo" style={{ height: "135px" }} />
-      </Box>
-      <List sx={{ flexGrow: 1 }}>
-        {["Inventory", "Add Inventory", "Customers", "Orders"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 2,
+          }}
+        >
+          <img src={techSLlogo} alt="TechSL Logo" style={{ height: "135px" }} />
+        </Box>
+        <List sx={{ flexGrow: 1 }}>
+          {drawerItems.map((item, index) => (
+            <ListItem key={item.text} disablePadding>
               <ListItemButton
                 sx={{
                   my: 1,
@@ -43,77 +64,25 @@ function ResponsiveDrawer(props) {
                   borderRadius: "10px",
                 }}
               >
-                <ListItemIcon>
-                  {index === 0 ? (
-                    <InventoryIcon />
-                  ) : index === 1 ? (
-                    <LaptopMacIcon />
-                  ) : index === 2 ? (
-                    <PersonIcon />
-                  ) : (
-                    <ShoppingCartOutlinedIcon />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
-          )
-        )}
-      </List>
-      <List sx={{ marginBottom: 2 }}>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ my: 1, mx: 2 }}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ my: 1, mx: 2 }}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Log out" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </div>
-  );
-
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <Box
-        component="nav"
-        sx={{ width: drawerWidth, flexShrink: 0 }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          variant="permanent"
-          sx={{
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: `calc(100% - ${drawerWidth}px)`,
-        }}
-      >
-        <Toolbar />
-      </Box>
+          ))}
+        </List>
+        <List>
+          {settingsItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton sx={{ my: 1, mx: 2 }}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </Box>
   );
-}
+};
 
-export default ResponsiveDrawer;
+export default NavBar;

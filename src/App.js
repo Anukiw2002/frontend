@@ -1,12 +1,8 @@
 import React from "react";
-import ResponsiveDrawer from "./components/NavBar";
+import AddInventory from "./components/AddInventory";
 
 function App() {
-  return (
-    <div>
-      <ResponsiveDrawer />
-    </div>
-  );
+  return <AddInventory />;
 }
 
 export default App;
