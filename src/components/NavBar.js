@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -19,15 +20,15 @@ const drawerWidth = 240;
 
 const NavBar = () => {
   const drawerItems = [
-    { text: "Inventory", icon: <InventoryIcon /> },
-    { text: "Add Inventory", icon: <LaptopMacIcon /> },
-    { text: "Customers", icon: <PersonIcon /> },
-    { text: "Orders", icon: <ShoppingCartOutlinedIcon /> },
+    { text: "Inventory", icon: <InventoryIcon />, path: "/add-products" },
+    { text: "Add Inventory", icon: <LaptopMacIcon />, path: "/add-inventory" },
+    { text: "Customers", icon: <PersonIcon />, path: "/customers" },
+    { text: "Orders", icon: <ShoppingCartOutlinedIcon />, path: "/orders" },
   ];
 
   const settingsItems = [
-    { text: "Settings", icon: <SettingsIcon /> },
-    { text: "Log out", icon: <LogoutIcon /> },
+    { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
+    { text: "Log out", icon: <LogoutIcon />, path: "/logout" },
   ];
 
   return (
@@ -54,9 +55,11 @@ const NavBar = () => {
           <img src={techSLlogo} alt="TechSL Logo" style={{ height: "135px" }} />
         </Box>
         <List sx={{ flexGrow: 1 }}>
-          {drawerItems.map((item, index) => (
+          {drawerItems.map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton
+                component={Link}
+                to={item.path}
                 sx={{
                   my: 1,
                   mx: 2,
@@ -73,7 +76,11 @@ const NavBar = () => {
         <List>
           {settingsItems.map((item) => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton sx={{ my: 1, mx: 2 }}>
+              <ListItemButton
+                component={Link}
+                to={item.path}
+                sx={{ my: 1, mx: 2 }}
+              >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
