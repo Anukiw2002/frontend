@@ -28,7 +28,7 @@ function AddInventory() {
           width: `calc(100% - ${drawerWidth}px)`,
         }}
       >
-        <h2>Add Products</h2>
+        <h2>Add Products Category</h2>
         <Box className="container">
           <TextField
             id="date-picker"
