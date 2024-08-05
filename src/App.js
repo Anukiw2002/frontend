@@ -1,11 +1,18 @@
 import React from "react";
-import ResponsiveDrawer from "./components/NavBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AddInventory from "./components/AddInventory";
+import AddProduct from "./components/AddProducts";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
-    <div>
-      <ResponsiveDrawer />
-    </div>
+    <Router>
+      <NavBar />
+      <Routes>
+        <Route path="add-products" element={<AddProduct />} />
+        <Route path="add-inventory" element={<AddInventory />} />
+      </Routes>
+    </Router>
   );
 }
 

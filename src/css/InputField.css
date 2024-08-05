@@ -1,0 +1,4 @@
+.inputBox {
+  width: calc(90% - 40px);
+  margin: 10px 20px 40px 20px;
+}
