@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
-
+import NavBar from "../components/NavBar";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
@@ -18,6 +18,7 @@ function AddInventory() {
 
   return (
     <Box sx={{ display: "flex" }}>
+      <NavBar />
       <Box
         component="main"
         sx={{
