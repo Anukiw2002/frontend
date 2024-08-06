@@ -1,20 +1,16 @@
 import React, { useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import CtaButton from "../components/CtaButton";
 import SearchIcon from "@mui/icons-material/Search";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Box, TextField, InputAdornment } from "@mui/material";
-// import "../css/InputField.css";
-// import "../css/CtaButton.css";
-import { width } from "@mui/system";
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 
-function AddInventory() {
-  const [productCategory, setProductCategory] = useState("");
+function ShowInventory() {
+  const navigate = useNavigate();
 
-  const handleCategoryChange = (event) => {
-    setProductCategory(event.target.value);
+  const handleAddButtonClick = () => {
+    navigate("/add-product");
   };
-
   const drawerWidth = 280;
 
   return (
@@ -78,7 +74,9 @@ function AddInventory() {
                 },
               }}
             />
-            <CtaButton sx={{ width: 100, height: 40 }} ctaName="Add" />
+            <Button onClick={handleAddButtonClick} variant="contained">
+              Add
+            </Button>
           </Box>
         </Box>
       </Box>
@@ -86,4 +84,4 @@ function AddInventory() {
   );
 }
 
-export default AddInventory;
+export default ShowInventory;

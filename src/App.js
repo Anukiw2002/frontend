@@ -14,6 +14,7 @@ function App() {
         <Route path="show-products" element={<ShowInventory />} />
         <Route path="add-inventory" element={<AddInventory />} />
         <Route path="customers" element={<AddCustomer />} />
+        <Route path="/add-product" element={<AddProduct />} />
       </Routes>
     </Router>
   );
