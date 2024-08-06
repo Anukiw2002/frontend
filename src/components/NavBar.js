@@ -20,7 +20,7 @@ const drawerWidth = 240;
 
 const NavBar = () => {
   const drawerItems = [
-    { text: "Inventory", icon: <InventoryIcon />, path: "/add-products" },
+    { text: "Inventory", icon: <InventoryIcon />, path: "/show-products" },
     { text: "Add Inventory", icon: <LaptopMacIcon />, path: "/add-inventory" },
     { text: "Customers", icon: <PersonIcon />, path: "/customers" },
     { text: "Orders", icon: <ShoppingCartOutlinedIcon />, path: "/orders" },

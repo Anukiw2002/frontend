@@ -5,7 +5,6 @@ import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
-import "../css/AddProducts.css";
 
 function AddInventory() {
   const [productCategory, setProductCategory] = useState("");
@@ -17,7 +16,7 @@ function AddInventory() {
   const drawerWidth = 280;
 
   return (
-    <div className="box">
+    <Box sx={{ backgroundColor: "lightgray" }}>
       <Box sx={{ display: "flex" }}>
         <Box
           component="main"
@@ -78,7 +77,7 @@ function AddInventory() {
           </Box>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 
