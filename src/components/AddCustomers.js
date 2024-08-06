@@ -2,22 +2,21 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
-
+import NavBar from "../components/NavBar";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
 
-function AddInventory() {
-  const [productCategory, setProductCategory] = useState("");
 
-  const handleCategoryChange = (event) => {
-    setProductCategory(event.target.value);
-  };
+
+function AddCustomer() {
+  
 
   const drawerWidth = 240;
 
   return (
     <Box sx={{ display: "flex" }}>
+      <NavBar />
       <Box
         component="main"
         sx={{
@@ -27,52 +26,41 @@ function AddInventory() {
           width: `calc(100% - ${drawerWidth}px)`,
         }}
       >
-        <h2>Add Stock levels</h2>
+        <h2>Add New Customer </h2>
         <Box className="container">
           <TextField
-            id="date-picker"
-            label="Date"
-            type="date"
-            InputLabelProps={{ shrink: true }}
+            id="cutsomerName"
+            label="Name"
             variant="filled"
             fullWidth
           />{" "}
         </Box>
         <Box sx={{ mb: 2 }}>
           <TextField
-            id="filled-product-id"
-            label="Enter Product ID"
+            id="customerNumber"
+            label="Contact Number"
             variant="filled"
             fullWidth
           />
         </Box>
         <Box sx={{ mb: 2 }}>
           <TextField
-            id="filled-product-name"
-            label="Product Name"
+            id="email"
+            label="Email Address"
             variant="filled"
             fullWidth
+            onChange={(e) => {
+              const email = e.target.value;
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[\s@]+$/;
+              const isValidEmail = emailRegex.test(email);
+              console.log(isValidEmail);
+            }}
           />
         </Box>
         <Box sx={{ mb: 2 }}>
           <TextField
-            id="filled-product-category"
-            select
-            label="Select Product Category"
-            value={productCategory}
-            onChange={handleCategoryChange}
-            variant="filled"
-            fullWidth
-          >
-            <MenuItem value="Electronics">Electronics</MenuItem>
-            <MenuItem value="Apparel">Apparel</MenuItem>
-            <MenuItem value="Home Goods">Home Goods</MenuItem>
-          </TextField>
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            id="filled-inventory-quantity"
-            label="Inventory Quantity"
+            id="customerAddress"
+            label="Adress"
             variant="filled"
             fullWidth
           />
@@ -85,4 +73,4 @@ function AddInventory() {
   );
 }
 
-export default AddInventory;
+export default AddCustomer;
