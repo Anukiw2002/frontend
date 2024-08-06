@@ -14,12 +14,10 @@ function App() {
       <Routes>
         <Route path="show-products" element={<ShowInventory />} />
         <Route path="add-inventory" element={<AddInventory />} />
-<<<<<<< HEAD
         <Route path="customers" element={<Customer />} />
-=======
-        <Route path="customers" element={<AddCustomer />} />
+        <Route path="/add-customers" element={<AddCustomer />} />
         <Route path="/add-product" element={<AddProduct />} />
->>>>>>> 996f71358a1e3266a71b0b74e0fb31c54a65e549
+
       </Routes>
     </Router>
   );
