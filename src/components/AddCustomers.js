@@ -1,17 +1,11 @@
-import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
 import NavBar from "../components/NavBar";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
 
-
-
 function AddCustomer() {
-  
-
   const drawerWidth = 240;
 
   return (

@@ -1,0 +1,61 @@
+.signUpContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.bgImage2 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.formContainer {
+  margin-left: 50px;
+  z-index: 1;
+}
+
+.signUp {
+  color: #26599f;
+  font-size: 50px;
+  font-family: "Cardo", serif;
+  font-weight: 700;
+  word-wrap: break-word;
+  margin-bottom: 20px;
+}
+
+.loginPrompt {
+  margin-top: 10px;
+  margin-left: 50px;
+  font-size: 16px;
+  color: #000;
+  font-family: "Cardo", serif;
+}
+
+.loginPrompt a {
+  color: #26599f;
+  text-decoration: none;
+}
+
+.loginPrompt a:hover {
+  text-decoration: underline;
+}
+
+.logoContainer {
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
+}
+
+.logo {
+  width: 450px;
+  height: auto;
+  margin-right: 50px;
+}
