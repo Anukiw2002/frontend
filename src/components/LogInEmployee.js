@@ -1,26 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import bg from "../pictures/bgImage.png";
 import logo from "../pictures/Logo.png";
 import "../css/SignUp.css";
 import InputField from "./InputField";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
-function SignUpManager() {
+function LogInEmployee() {
   return (
     <div className="signUpContainer">
       <img src={bg} alt="Background" className="bgImage2" />
       <div className="formContainer">
-        <p className="signUp">Sign Up</p>
-        <InputField detail="Manager ID:" inputLabel="Enter your ID..." />
+        <p className="signUp">Log in</p>
+        <InputField detail="Employee ID:" inputLabel="Enter your ID..." />
         <InputField detail="Password:" inputLabel="Enter your password..." />
-        <InputField
-          detail="Re-enter Password:"
-          inputLabel="Enter your password..."
-        />
-        <Button action="Sign Up" link="/show-products" />
+        <Button action="Log In" />
         <p className="loginPrompt">
-          Already have an account? <Link to="/loginmanager"> Login </Link>
+          Not registered yet? <Link to="/signup-employee"> Sign Up </Link>
         </p>
       </div>
       <div className="logoContainer">
@@ -30,4 +26,4 @@ function SignUpManager() {
   );
 }
 
-export default SignUpManager;
+export default LogInEmployee;

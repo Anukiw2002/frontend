@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import bg from "../pictures/bgImage.png";
 import logo from "../pictures/Logo.png";
 import "../css/SignUp.css";
@@ -17,9 +18,9 @@ function SignUpEmployee() {
           detail="Re-enter Password:"
           inputLabel="Enter your password..."
         />
-        <Button action="Sign Up" />
+        <Button action="Sign Up" link="/show-products" />
         <p className="loginPrompt">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <Link to="/loginemployee"> Login </Link>
         </p>
       </div>
       <div className="logoContainer">

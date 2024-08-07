@@ -8,6 +8,8 @@ import {
 import Homepage from "./components/Homepage";
 import SignUpEmployee from "./components/SignUp-Employee";
 import SignUpManager from "./components/SignUp-Manager";
+import LogInEmployee from "./components/LogInEmployee";
+import LogInManager from "./components/LogInManager";
 import AddInventory from "./components/AddInventory";
 import AddProduct from "./components/AddProducts";
 import AddCustomer from "./components/AddCustomers";
@@ -18,7 +20,13 @@ import Customer from "./components/Customer";
 function App() {
   const location = useLocation();
 
-  const hideNavBarPaths = ["/", "/signup-employee", "/signup-manager"];
+  const hideNavBarPaths = [
+    "/",
+    "/signup-employee",
+    "/signup-manager",
+    "/loginemployee",
+    "/loginmanager",
+  ];
 
   return (
     <>
@@ -27,6 +35,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/signup-employee" element={<SignUpEmployee />} />
         <Route path="/signup-manager" element={<SignUpManager />} />
+        <Route path="/loginemployee" element={<LogInEmployee />} />
+        <Route path="/loginmanager" element={<LogInManager />} />
         <Route path="/show-products" element={<ShowInventory />} />
         <Route path="/add-inventory" element={<AddInventory />} />
         <Route path="/customers" element={<Customer />} />
