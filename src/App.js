@@ -5,6 +5,7 @@ import AddProduct from "./components/AddProducts";
 import AddCustomer from "./components/AddCustomers";
 import ShowInventory from "./components/ShowInventory";
 import NavBar from "./components/NavBar";
+import OrderHistory from "./components/OderHistory";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="add-inventory" element={<AddInventory />} />
         <Route path="customers" element={<AddCustomer />} />
         <Route path="/add-product" element={<AddProduct />} />
+        <Route path="OrderHistory" element={<OrderHistory />} />
       </Routes>
     </Router>
   );
