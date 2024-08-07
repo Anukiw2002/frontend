@@ -14,7 +14,7 @@ function LogInEmployee() {
         <p className="signUp">Log in</p>
         <InputField detail="Employee ID:" inputLabel="Enter your ID..." />
         <InputField detail="Password:" inputLabel="Enter your password..." />
-        <Button action="Log In" />
+        <Button action="Log In" link="/show-products" />
         <p className="loginPrompt">
           Not registered yet? <Link to="/signup-employee"> Sign Up </Link>
         </p>
