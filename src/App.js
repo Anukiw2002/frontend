@@ -16,7 +16,8 @@ import AddCustomer from "./components/AddCustomers";
 import ShowInventory from "./components/ShowInventory";
 import NavBar from "./components/NavBar";
 import OrderHistory from "./components/OderHistory";
-import OrderDetails from "./components/OrderDetails"
+import OrderDetails from "./components/OrderDetails";
+import CreateOrder from "./components/CreateOrder";
 import Customer from "./components/Customer";
 
 function App() {
@@ -45,7 +46,8 @@ function App() {
         <Route path="/add-customers" element={<AddCustomer />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/orderhistory" element={<OrderHistory />} />
-        <Route path="/order-details/:id" element={<OrderDetails />} />
+        <Route path="/create-order" element={<CreateOrder />} />
+        <Route path="/orderhistory/:id" element={<OrderDetails />} />
       </Routes>
     </>
   );

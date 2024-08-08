@@ -14,6 +14,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CreateIcon from "@mui/icons-material/Create";
 import techSLlogo from "../pictures/Logo.png";
 
 const drawerWidth = 240;
@@ -23,7 +24,12 @@ const NavBar = () => {
     { text: "Inventory", icon: <InventoryIcon />, path: "/show-products" },
     { text: "Add Inventory", icon: <LaptopMacIcon />, path: "/add-inventory" },
     { text: "Customers", icon: <PersonIcon />, path: "/customers" },
-    { text: "Orders", icon: <ShoppingCartOutlinedIcon />, path: "/orderhistory" },
+    {
+      text: "Orders",
+      icon: <ShoppingCartOutlinedIcon />,
+      path: "/orderhistory",
+    },
+    { text: "Create Order", icon: <CreateIcon />, path: "/create-order" },
   ];
 
   const settingsItems = [

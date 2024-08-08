@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
-import "../css/InputField.css";
-import "../css/CtaButton.css";
 import {
   Table,
   TableBody,
@@ -16,13 +14,21 @@ import Button from "@mui/material/Button";
 function OrderDetails() {
   const { id } = useParams();
 
-  const [orders, setOrders] = useState([
+  const [orders] = useState([
     {
       id: 1,
       date: "2024-08-01",
       items: [
         { name: "iPhone", quantity: "1", price: "$2000" },
-        { name: "macbook", quantity: "1", price: "$1300" },
+        { name: "MacBook", quantity: "1", price: "$1300" },
+      ],
+    },
+    {
+      id: 2,
+      date: "2024-08-02",
+      items: [
+        { name: "Samsung Galaxy", quantity: "2", price: "$1500" },
+        { name: "Dell Laptop", quantity: "1", price: "$1000" },
       ],
     },
     // Add more orders as needed
@@ -30,14 +36,14 @@ function OrderDetails() {
 
   const order = orders.find((order) => order.id === parseInt(id));
 
-  const handleEdit = (id) => {
+  const handleEdit = (orderId) => {
     // Implement edit functionality
-    console.log(`Edit order with id: ${id}`);
+    console.log(`Edit order with id: ${orderId}`);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (orderId) => {
     // Implement delete functionality
-    console.log(`Delete order with id: ${id}`);
+    console.log(`Delete order with id: ${orderId}`);
   };
 
   return (
@@ -58,7 +64,7 @@ function OrderDetails() {
           }}
         >
           <h1>Order Details</h1>
-          {order && (
+          {order ? (
             <Box key={order.id}>
               <h3>Order Date - {order.date}</h3>
               <h3>Customer ID - {order.id}</h3>
@@ -71,8 +77,12 @@ function OrderDetails() {
                         <TableCell>{item.price}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
-                          <Button onClick={() => handleEdit(order.id)}></Button>
-                          <Button onClick={() => handleDelete(order.id)}></Button>
+                          <Button onClick={() => handleEdit(order.id)}>
+                            Edit
+                          </Button>
+                          <Button onClick={() => handleDelete(order.id)}>
+                            Delete
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -80,6 +90,8 @@ function OrderDetails() {
                 </Table>
               </TableContainer>
             </Box>
+          ) : (
+            <p>Order not found.</p>
           )}
         </Box>
       </Box>
