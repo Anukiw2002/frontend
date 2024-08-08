@@ -39,10 +39,8 @@ function OrderHistory() {
   ];
 
   return (
-    <Box sx={{ backgroundColor: "lightgray" }} className="centered-container">
-      <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
+    <Box sx={{ backgroundColor: "lightgray" }}>
+      <Box sx={{ display: "flex" }}>
         <Box
           component="main"
           sx={{
