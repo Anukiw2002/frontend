@@ -1,0 +1,34 @@
+.container {
+  position: relative;
+  width: 98vw;
+  height: 97vh;
+  overflow: hidden;
+}
+
+.bgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.logo {
+  width: 450px;
+  height: 160px;
+  align-self: center;
+  margin-top: 80px;
+}
+
+.buttonContainer {
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 178px;
+  display: inline-flex;
+  margin-left: 80px;
+  margin-bottom: 160px;
+}
