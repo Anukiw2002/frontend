@@ -10,7 +10,6 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "../css/OrderHistory.css";
 
 function OrderHistory() {
   const drawerWidth = 280;

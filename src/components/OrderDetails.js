@@ -10,6 +10,8 @@ import {
   Paper,
 } from "@mui/material";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function OrderDetails() {
   const { id } = useParams();
@@ -78,10 +80,10 @@ function OrderDetails() {
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
                           <Button onClick={() => handleEdit(order.id)}>
-                            Edit
+                            <EditIcon />
                           </Button>
                           <Button onClick={() => handleDelete(order.id)}>
-                            Delete
+                            <DeleteIcon />
                           </Button>
                         </TableCell>
                       </TableRow>
