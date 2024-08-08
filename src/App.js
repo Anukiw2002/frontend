@@ -15,11 +15,9 @@ import AddProduct from "./components/AddProducts";
 import AddCustomer from "./components/AddCustomers";
 import ShowInventory from "./components/ShowInventory";
 import NavBar from "./components/NavBar";
-<<<<<<< HEAD
 import OrderHistory from "./components/OderHistory";
-=======
+import OrderDetails from "./components/OrderDetails"
 import Customer from "./components/Customer";
->>>>>>> origin/main
 
 function App() {
   const location = useLocation();
@@ -46,7 +44,8 @@ function App() {
         <Route path="/customers" element={<Customer />} />
         <Route path="/add-customers" element={<AddCustomer />} />
         <Route path="/add-product" element={<AddProduct />} />
-        <Route path="OrderHistory" element={<OrderHistory />} />
+        <Route path="/orderhistory" element={<OrderHistory />} />
+        <Route path="/order-details/:id" element={<OrderDetails />} />
       </Routes>
     </>
   );

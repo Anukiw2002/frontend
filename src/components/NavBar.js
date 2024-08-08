@@ -23,7 +23,7 @@ const NavBar = () => {
     { text: "Inventory", icon: <InventoryIcon />, path: "/show-products" },
     { text: "Add Inventory", icon: <LaptopMacIcon />, path: "/add-inventory" },
     { text: "Customers", icon: <PersonIcon />, path: "/customers" },
-    { text: "Orders", icon: <ShoppingCartOutlinedIcon />, path: "/OrderHistory" },
+    { text: "Orders", icon: <ShoppingCartOutlinedIcon />, path: "/orderhistory" },
   ];
 
   const settingsItems = [
