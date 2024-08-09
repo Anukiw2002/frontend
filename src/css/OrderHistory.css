@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Make sure the container takes the full viewport height */
+  height: 100vh; 
 }
 
 .table-wrapper {
-  width: 80%; /* Adjust the width as needed */
+  width: 80%; 
 }

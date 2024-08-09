@@ -43,7 +43,6 @@ function OrderHistory() {
       date: "2024-08-02",
       price: "$1800",
     },
-    // Add more customer data as needed
   ]);
 
   return (

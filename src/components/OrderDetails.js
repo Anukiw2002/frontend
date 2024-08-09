@@ -1,5 +1,4 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
@@ -11,10 +10,14 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 
-function OrderDetails() {
-  const { id } = useParams();
+function OrderHistory() {
+  const drawerWidth = 280;
+
+  const navigate = useNavigate();
+
 
   const [orders, setOrders] = useState([
     {
@@ -25,18 +28,13 @@ function OrderDetails() {
         { name: "macbook", quantity: "1", price: "$1300" },
       ],
     },
-    // Add more orders as needed
   ]);
 
-  const order = orders.find((order) => order.id === parseInt(id));
-
   const handleEdit = (id) => {
-    // Implement edit functionality
     console.log(`Edit order with id: ${id}`);
   };
 
   const handleDelete = (id) => {
-    // Implement delete functionality
     console.log(`Delete order with id: ${id}`);
   };
 
@@ -51,14 +49,14 @@ function OrderDetails() {
             mt: 17,
             mb: 18,
             mr: 3,
-            ml: "280px",
-            width: `calc(100% - 280px)`,
+            ml: `${drawerWidth}px`,
+            width: `calc(100% - ${drawerWidth}px)`,
             backgroundColor: "white",
             borderRadius: "24px",
           }}
         >
           <h1>Order Details</h1>
-          {order && (
+          {orders.map((order) => (
             <Box key={order.id}>
               <h3>Order Date - {order.date}</h3>
               <h3>Customer ID - {order.id}</h3>
@@ -80,11 +78,11 @@ function OrderDetails() {
                 </Table>
               </TableContainer>
             </Box>
-          )}
+          ))}
         </Box>
       </Box>
     </Box>
   );
 }
 
-export default OrderDetails;
+export default OrderHistory;
