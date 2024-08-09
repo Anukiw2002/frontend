@@ -23,8 +23,8 @@ function AddInventory() {
           sx={{
             flexGrow: 1,
             p: 10,
-            mt: 17,
-            mb: 12,
+            mt: 6,
+            mb: 6,
             mr: 3,
             ml: `${drawerWidth}px`,
             width: `calc(100% - ${drawerWidth}px)`,
@@ -33,7 +33,7 @@ function AddInventory() {
           }}
         >
           <h2>Products Details</h2>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-id"
               label="Enter Product ID"
@@ -41,7 +41,7 @@ function AddInventory() {
               fullWidth
             />
           </Box>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-name"
               label="Product Name"
@@ -49,7 +49,7 @@ function AddInventory() {
               fullWidth
             />
           </Box>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-category"
               select
