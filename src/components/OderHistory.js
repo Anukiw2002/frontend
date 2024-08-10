@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import "../css/InputField.css";
-import "../css/CtaButton.css";
 import {
   Table,
   TableBody,
@@ -12,23 +10,17 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
 import "../css/OrderHistory.css";
 
 function OrderHistory() {
   const drawerWidth = 280;
-
   const navigate = useNavigate();
 
-  const handleAddButtonClick = () => {
-    navigate("/add-customers");
-  };
-
   const handleRowClick = (id) => {
-    navigate(`/order-details/${id}`);
+    navigate(`/orderhistory/${id}`);
   };
 
-  const [orders, setOrders] = useState([
+  const orders = [
     {
       id: 1,
       name: "Lewis Hamilton",
@@ -43,11 +35,13 @@ function OrderHistory() {
       date: "2024-08-02",
       price: "$1800",
     },
-  ]);
+  ];
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }} className="centered-container">
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
         <Box
           component="main"
           sx={{
@@ -77,7 +71,11 @@ function OrderHistory() {
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow key={order.id} onClick={() => handleRowClick(order.id)} style={{ cursor: 'pointer' }}>
+                  <TableRow
+                    key={order.id}
+                    onClick={() => handleRowClick(order.id)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <TableCell>{order.name}</TableCell>
                     <TableCell>{order.id}</TableCell>
                     <TableCell>{order.quantity}</TableCell>
