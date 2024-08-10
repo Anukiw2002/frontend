@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import {
@@ -17,7 +16,6 @@ function OrderHistory() {
   const drawerWidth = 280;
 
   const navigate = useNavigate();
-
 
   const [orders] = useState([
     {
@@ -38,15 +36,11 @@ function OrderHistory() {
     },
   ]);
 
-  const handleEdit = (id) => {
-    console.log(`Edit order with id: ${id}`);
   const handleEdit = (orderId) => {
     // Implement edit functionality
     console.log(`Edit order with id: ${orderId}`);
   };
 
-  const handleDelete = (id) => {
-    console.log(`Delete order with id: ${id}`);
   const handleDelete = (orderId) => {
     // Implement delete functionality
     console.log(`Delete order with id: ${orderId}`);
@@ -70,34 +64,34 @@ function OrderHistory() {
           }}
         >
           <h1>Order Details</h1>
-          {orders.map((order) => (
-          {order ? (
-            <Box key={order.id}>
-              <h3>Order Date - {order.date}</h3>
-              <h3>Customer ID - {order.id}</h3>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableBody>
-                    {order.items.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.price}</TableCell>
-                        <TableCell>{item.quantity}</TableCell>
-                        <TableCell>
-                          <Button onClick={() => handleEdit(order.id)}>
-                            Edit
-                          </Button>
-                          <Button onClick={() => handleDelete(order.id)}>
-                            Delete
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          ))}
+          {orders.length > 0 ? (
+            orders.map((order) => (
+              <Box key={order.id}>
+                <h3>Order Date - {order.date}</h3>
+                <h3>Customer ID - {order.id}</h3>
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableBody>
+                      {order.items.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.price}</TableCell>
+                          <TableCell>{item.quantity}</TableCell>
+                          <TableCell>
+                            <Button onClick={() => handleEdit(order.id)}>
+                              Edit
+                            </Button>
+                            <Button onClick={() => handleDelete(order.id)}>
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            ))
           ) : (
             <p>Order not found.</p>
           )}
