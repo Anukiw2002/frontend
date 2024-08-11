@@ -15,8 +15,8 @@ function AddCustomer() {
           sx={{
             flexGrow: 1,
             p: 10,
-            mt: 17,
-            mb: 12,
+            mt: 5,
+            mb: 5,
             mr: 3,
             ml: `${drawerWidth}px`,
             width: `calc(100% - ${drawerWidth}px)`,
@@ -25,7 +25,7 @@ function AddCustomer() {
           }}
         >
           <h2>Add New Customer </h2>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
               id="cutsomerName"
               label="Name"
@@ -33,7 +33,7 @@ function AddCustomer() {
               fullWidth
             />
           </Box>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
               id="customerNumber"
               label="Contact Number"
@@ -41,7 +41,7 @@ function AddCustomer() {
               fullWidth
             />
           </Box>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
               id="email"
               label="Email Address"
@@ -55,7 +55,7 @@ function AddCustomer() {
               }}
             />
           </Box>
-          <Box sx={{ mb: 8 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
               id="customerAddress"
               label="Adress"

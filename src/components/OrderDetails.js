@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function OrderHistory() {
   const drawerWidth = 280;
@@ -64,6 +66,7 @@ function OrderHistory() {
           }}
         >
           <h1>Order Details</h1>
+<<<<<<< HEAD
           {orders.length > 0 ? (
             orders.map((order) => (
               <Box key={order.id}>
@@ -92,6 +95,34 @@ function OrderHistory() {
                 </TableContainer>
               </Box>
             ))
+=======
+          {order ? (
+            <Box key={order.id}>
+              <h3>Order Date - {order.date}</h3>
+              <h3>Customer ID - {order.id}</h3>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableBody>
+                    {order.items.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.price}</TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>
+                          <Button onClick={() => handleEdit(order.id)}>
+                            <EditIcon />
+                          </Button>
+                          <Button onClick={() => handleDelete(order.id)}>
+                            <DeleteIcon />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+>>>>>>> origin/main
           ) : (
             <p>Order not found.</p>
           )}
