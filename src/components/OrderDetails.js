@@ -19,7 +19,7 @@ function OrderHistory() {
 
   const navigate = useNavigate();
 
-  const [orders] = useState([
+  const [order] = useState([
     {
       id: 1,
       date: "2024-08-01",
@@ -66,36 +66,6 @@ function OrderHistory() {
           }}
         >
           <h1>Order Details</h1>
-<<<<<<< HEAD
-          {orders.length > 0 ? (
-            orders.map((order) => (
-              <Box key={order.id}>
-                <h3>Order Date - {order.date}</h3>
-                <h3>Customer ID - {order.id}</h3>
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableBody>
-                      {order.items.map((item, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{item.name}</TableCell>
-                          <TableCell>{item.price}</TableCell>
-                          <TableCell>{item.quantity}</TableCell>
-                          <TableCell>
-                            <Button onClick={() => handleEdit(order.id)}>
-                              Edit
-                            </Button>
-                            <Button onClick={() => handleDelete(order.id)}>
-                              Delete
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            ))
-=======
           {order ? (
             <Box key={order.id}>
               <h3>Order Date - {order.date}</h3>
@@ -122,7 +92,6 @@ function OrderHistory() {
                 </Table>
               </TableContainer>
             </Box>
->>>>>>> origin/main
           ) : (
             <p>Order not found.</p>
           )}
