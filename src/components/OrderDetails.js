@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import {
   Table,
@@ -15,28 +16,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 function OrderDetails() {
   const { id } = useParams();
+  const [orderData, setOrderData] = useState(null);
+  const [orderDetails, setOrderDetails] = useState([]);
 
-  const [orders] = useState([
-    {
-      id: 1,
-      date: "2024-08-01",
-      items: [
-        { name: "iPhone", quantity: "1", price: "$2000" },
-        { name: "MacBook", quantity: "1", price: "$1300" },
-      ],
-    },
-    {
-      id: 2,
-      date: "2024-08-02",
-      items: [
-        { name: "Samsung Galaxy", quantity: "2", price: "$1500" },
-        { name: "Dell Laptop", quantity: "1", price: "$1000" },
-      ],
-    },
-    // Add more orders as needed
-  ]);
-
-  const order = orders.find((order) => order.id === parseInt(id));
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/orders/${id}/details`)
+      .then((response) => {
+        setOrderData(response.data.order);
+        setOrderDetails(response.data.orderDetails);
+      })
+      .catch((error) => console.error("Error fetching order details:", error));
+  }, [id]);
 
   const handleEdit = (orderId) => {
     // Implement edit functionality
@@ -66,23 +57,26 @@ function OrderDetails() {
           }}
         >
           <h1>Order Details</h1>
-          {order ? (
-            <Box key={order.id}>
-              <h3>Order Date - {order.date}</h3>
-              <h3>Customer ID - {order.id}</h3>
+          {orderData ? (
+            <Box key={orderData._id}>
+              <h3>
+                Order Date -{" "}
+                {new Date(orderData.orderDate).toLocaleDateString()}
+              </h3>
+              <h3>Customer ID - {orderData.customerID}</h3>
               <TableContainer component={Paper}>
                 <Table>
                   <TableBody>
-                    {order.items.map((item, index) => (
+                    {orderDetails.map((item, index) => (
                       <TableRow key={index}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.price}</TableCell>
+                        <TableCell>{item.productName}</TableCell>
+                        <TableCell>${item.price.toFixed(2)}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
-                          <Button onClick={() => handleEdit(order.id)}>
+                          <Button onClick={() => handleEdit(orderData._id)}>
                             <EditIcon />
                           </Button>
-                          <Button onClick={() => handleDelete(order.id)}>
+                          <Button onClick={() => handleDelete(orderData._id)}>
                             <DeleteIcon />
                           </Button>
                         </TableCell>
@@ -93,7 +87,7 @@ function OrderDetails() {
               </TableContainer>
             </Box>
           ) : (
-            <p>Order not found.</p>
+            <p>Loading order details...</p>
           )}
         </Box>
       </Box>

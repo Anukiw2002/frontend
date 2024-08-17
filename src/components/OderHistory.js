@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import {
   Table,
@@ -10,16 +10,28 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function OrderHistory() {
   const drawerWidth = 280;
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
 
   const handleRowClick = (id) => {
     navigate(`/orderhistory/${id}`);
   };
 
-  const orders = [
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/orders")
+      .then((response) => {
+        console.log("API response:", response.data);
+        setOrders(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  /*const orders = [
     {
       id: 1,
       name: "Lewis Hamilton",
@@ -34,8 +46,8 @@ function OrderHistory() {
       date: "2024-08-02",
       price: "$1800",
     },
-    // Add more customer data as needed
-  ];
+    // Add more order data as needed
+  ];*/
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -60,25 +72,23 @@ function OrderHistory() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Customer Name</TableCell>
-                  <TableCell>Order ID</TableCell>
-                  <TableCell>Order Quantity</TableCell>
                   <TableCell>Order Date</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Order ID</TableCell>
+                  <TableCell>Total Price</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
                   <TableRow
-                    key={order.id}
-                    onClick={() => handleRowClick(order.id)}
+                    key={order._id}
+                    onClick={() => handleRowClick(order._id)}
                     style={{ cursor: "pointer" }}
                   >
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.quantity}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>{order.price}</TableCell>
+                    <TableCell>
+                      {new Date(order.orderDate).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{order.orderID}</TableCell>
+                    <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
