@@ -1,25 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
-function AddCustomer() {
+function UpdateCustomer() {
+  const { id } = useParams(); // Get the customer ID from the URL
+  const navigate = useNavigate();
   const drawerWidth = 280;
 
-  const [customer_ID, setCustomerID] = useState("");
   const [fName, setfName] = useState("");
   const [lName, setlName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [contact_number, setContactNumber] = useState("");
 
+  // Fetch the customer data when the component mounts
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/customers/${id}`)
+      .then((res) => {
+        const customer = res.data;
+        setfName(customer.fName || "");
+        setlName(customer.lName || "");
+        setEmail(customer.email || "");
+        setAddress(customer.address || "");
+        setContactNumber(customer.contact_number || "");
+      })
+      .catch((err) => {
+        console.error("Error fetching customer data:", err);
+        // Optionally, you can set an error state here and display it to the user
+      });
+  }, [id]);
+
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
 
     axios
-      .post("http://localhost:3001/api/customers", {
-        customer_ID,
+      .put(`http://localhost:3001/api/customers/${id}`, {
         fName,
         lName,
         email,
@@ -28,17 +47,11 @@ function AddCustomer() {
       })
       .then((result) => {
         console.log(result);
-        // Clear the form
-        setCustomerID("");
-        setfName("");
-        setlName("");
-        setEmail("");
-        setAddress("");
-        setContactNumber("");
+        navigate("/customers"); // Redirect to customer list after updating
       })
       .catch((err) =>
         console.error(
-          "Error submitting form:",
+          "Error updating customer:",
           err.response ? err.response.data : err.message
         )
       );
@@ -61,17 +74,7 @@ function AddCustomer() {
             borderRadius: "24px",
           }}
         >
-          <h2>Add New Customer</h2>
-          <Box sx={{ mb: 4 }}>
-            <TextField
-              id="customerID"
-              label="Customer ID"
-              variant="filled"
-              fullWidth
-              value={customer_ID}
-              onChange={(e) => setCustomerID(e.target.value)}
-            />
-          </Box>
+          <h2>Update Customer</h2>
           <Box sx={{ mb: 4 }}>
             <TextField
               id="fName"
@@ -123,7 +126,7 @@ function AddCustomer() {
             />
           </Box>
           <Box className="cta-container">
-            <CtaButton onClick={handleSubmit} ctaName="Add" />
+            <CtaButton onClick={handleSubmit} ctaName="Update" />
           </Box>
         </Box>
       </Box>
@@ -131,4 +134,4 @@ function AddCustomer() {
   );
 }
 
-export default AddCustomer;
+export default UpdateCustomer;
