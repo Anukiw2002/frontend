@@ -8,7 +8,10 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -16,10 +19,6 @@ function OrderHistory() {
   const drawerWidth = 280;
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-
-  const handleRowClick = (id) => {
-    navigate(`/orderhistory/${id}`);
-  };
 
   useEffect(() => {
     axios
@@ -31,23 +30,19 @@ function OrderHistory() {
       .catch((err) => console.log(err));
   }, []);
 
-  /*const orders = [
-    {
-      id: 1,
-      name: "Lewis Hamilton",
-      quantity: "150",
-      date: "2024-08-01",
-      price: "$2000",
-    },
-    {
-      id: 2,
-      name: "George Russell",
-      quantity: "119",
-      date: "2024-08-02",
-      price: "$1800",
-    },
-    // Add more order data as needed
-  ];*/
+  const handleSeeMore = (id) => {
+    navigate(`/orderdetails/${id}`);
+  };
+
+  const handleEdit = (id) => {
+    // Implement edit functionality
+    console.log("Edit order", id);
+  };
+
+  const handleDelete = (id) => {
+    // Implement delete functionality
+    console.log("Delete order", id);
+  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -75,20 +70,40 @@ function OrderHistory() {
                   <TableCell>Order Date</TableCell>
                   <TableCell>Order ID</TableCell>
                   <TableCell>Total Price</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow
-                    key={order._id}
-                    onClick={() => handleRowClick(order._id)}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <TableRow key={order._id}>
                     <TableCell>
-                      {new Date(order.orderDate).toLocaleDateString()}
+                      {order.orderDate
+                        ? new Date(order.orderDate).toLocaleDateString()
+                        : "N/A"}
                     </TableCell>
-                    <TableCell>{order.orderID}</TableCell>
-                    <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                    <TableCell>{order.orderID || "N/A"}</TableCell>
+                    <TableCell>
+                      {order.totalPrice != null
+                        ? `$${order.totalPrice.toFixed(2)}`
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      <Button onClick={() => handleEdit(order._id)}>
+                        <EditIcon />
+                      </Button>
+                      <Button onClick={() => handleDelete(order._id)}>
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        onClick={() => handleSeeMore(order._id)}
+                      >
+                        See More
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
