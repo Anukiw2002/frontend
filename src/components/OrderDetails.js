@@ -7,37 +7,23 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
 } from "@mui/material";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 function OrderDetails() {
   const { id } = useParams();
   const [orderData, setOrderData] = useState(null);
-  const [orderDetails, setOrderDetails] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/orders/${id}/details`)
+      .get(`http://localhost:3001/api/orders/${id}`)
       .then((response) => {
-        setOrderData(response.data.order);
-        setOrderDetails(response.data.orderDetails);
+        setOrderData(response.data);
       })
       .catch((error) => console.error("Error fetching order details:", error));
   }, [id]);
-
-  const handleEdit = (orderId) => {
-    // Implement edit functionality
-    console.log(`Edit order with id: ${orderId}`);
-  };
-
-  const handleDelete = (orderId) => {
-    // Implement delete functionality
-    console.log(`Delete order with id: ${orderId}`);
-  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -58,30 +44,49 @@ function OrderDetails() {
         >
           <h1>Order Details</h1>
           {orderData ? (
-            <Box key={orderData._id}>
-              <h3>
-                Order Date -{" "}
-                {new Date(orderData.orderDate).toLocaleDateString()}
-              </h3>
-              <h3>Customer ID - {orderData.customerID}</h3>
+            <Box>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h3>
+                    Order Date:{" "}
+                    {new Date(orderData.orderDate).toLocaleDateString()}
+                  </h3>
+                  <h3>Customer ID: {orderData.customer_ID}</h3>
+                </div>
+                <div>
+                  <h3>Order ID: {orderData.orderID}</h3>
+                  <h3>Customer Name: {orderData.fName || "N/A"}</h3>
+                </div>
+              </div>
               <TableContainer component={Paper}>
                 <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Product Name</TableCell>
+                      <TableCell>Price</TableCell>
+                      <TableCell>Quantity</TableCell>
+                      <TableCell>Total</TableCell>
+                    </TableRow>
+                  </TableHead>
                   <TableBody>
-                    {orderDetails.map((item, index) => (
+                    {orderData.orderDetails.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell>{item.productName}</TableCell>
-                        <TableCell>${item.price.toFixed(2)}</TableCell>
+                        <TableCell>Rs. {item.price.toFixed(2)}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
-                          <Button onClick={() => handleEdit(orderData._id)}>
-                            <EditIcon />
-                          </Button>
-                          <Button onClick={() => handleDelete(orderData._id)}>
-                            <DeleteIcon />
-                          </Button>
+                          Rs. {(item.price * item.quantity).toFixed(2)}
                         </TableCell>
                       </TableRow>
                     ))}
+                    <TableRow>
+                      <TableCell colSpan={3} align="right">
+                        <strong>Sub Total</strong>
+                      </TableCell>
+                      <TableCell>
+                        <strong>Rs. {orderData.totalPrice.toFixed(2)}</strong>
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
