@@ -6,7 +6,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateCustomer() {
-  const { id } = useParams(); // Get the customer ID from the URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const drawerWidth = 280;
 
@@ -16,7 +16,6 @@ function UpdateCustomer() {
   const [address, setAddress] = useState("");
   const [contact_number, setContactNumber] = useState("");
 
-  // Fetch the customer data when the component mounts
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/customers/${id}`)
@@ -30,7 +29,6 @@ function UpdateCustomer() {
       })
       .catch((err) => {
         console.error("Error fetching customer data:", err);
-        // Optionally, you can set an error state here and display it to the user
       });
   }, [id]);
 
@@ -47,7 +45,7 @@ function UpdateCustomer() {
       })
       .then((result) => {
         console.log(result);
-        navigate("/customers"); // Redirect to customer list after updating
+        navigate("/customers");
       })
       .catch((err) =>
         console.error(

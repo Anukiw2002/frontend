@@ -35,13 +35,17 @@ function OrderHistory() {
   };
 
   const handleEdit = (id) => {
-    // Implement edit functionality
-    console.log("Edit order", id);
+    navigate(`/update-order/${id}`);
   };
 
   const handleDelete = (id) => {
-    // Implement delete functionality
-    console.log("Delete order", id);
+    axios
+      .delete(`http://localhost:3001/api/orders/${id}`)
+      .then((res) => {
+        console.log(res);
+        setOrders(orders.filter((order) => order._id !== id));
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -84,9 +88,10 @@ function OrderHistory() {
                     <TableCell>{order.orderID || "N/A"}</TableCell>
                     <TableCell>
                       {order.totalPrice != null
-                        ? `$${order.totalPrice.toFixed(2)}`
+                        ? `Rs. ${order.totalPrice.toFixed(2)}`
                         : "N/A"}
                     </TableCell>
+
                     <TableCell>
                       <Button onClick={() => handleEdit(order._id)}>
                         <EditIcon />

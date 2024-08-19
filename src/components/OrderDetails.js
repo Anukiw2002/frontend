@@ -20,7 +20,29 @@ function OrderDetails() {
     axios
       .get(`http://localhost:3001/api/orders/${id}`)
       .then((response) => {
-        setOrderData(response.data);
+        const order = response.data;
+
+        // Calculate the subtotal
+        const subtotal = order.orderDetails.reduce((acc, item) => {
+          return acc + item.price * item.quantity;
+        }, 0);
+
+        // Update the order's totalprice with the calculated subtotal
+        if (subtotal !== order.totalprice) {
+          axios
+            .put(`http://localhost:3001/api/orders/${id}`, {
+              totalprice: subtotal,
+            })
+            .then((updateResponse) => {
+              // Set the updated order data with the correct subtotal
+              setOrderData({ ...order, totalprice: subtotal });
+            })
+            .catch((error) =>
+              console.error("Error updating order subtotal:", error)
+            );
+        } else {
+          setOrderData(order);
+        }
       })
       .catch((error) => console.error("Error fetching order details:", error));
   }, [id]);
@@ -84,7 +106,12 @@ function OrderDetails() {
                         <strong>Sub Total</strong>
                       </TableCell>
                       <TableCell>
-                        <strong>Rs. {orderData.totalPrice.toFixed(2)}</strong>
+                        <strong>
+                          Rs.{" "}
+                          {orderData.totalprice
+                            ? orderData.totalprice.toFixed(2)
+                            : "N/A"}
+                        </strong>
                       </TableCell>
                     </TableRow>
                   </TableBody>
