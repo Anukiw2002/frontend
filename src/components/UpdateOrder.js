@@ -63,19 +63,16 @@ function UpdateOrder() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Calculate the totalPrice as the sum of the (price * quantity) for each order detail item
     const calculatedTotalPrice = order.orderDetails.reduce((sum, item) => {
       return sum + item.price * item.quantity;
     }, 0);
 
-    // Set the calculated totalPrice before making the API request
     const updatedOrder = { ...order, totalPrice: calculatedTotalPrice };
 
     axios
       .put(`http://localhost:3001/api/orders/${id}`, updatedOrder)
       .then((result) => {
         console.log("Order updated successfully:", result.data);
-        // Redirect to the OrderDetails page for this order
         navigate(`/orderdetails/${id}`);
       })
       .catch((err) =>

@@ -18,8 +18,9 @@ function OrderDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/orders/${id}`)
+      .get(`http://localhost:3001/api/orders/${id}/details`)
       .then((response) => {
+        console.log("API response:", response.data); // Log the response data
         const order = response.data;
 
         // Calculate the subtotal
@@ -73,11 +74,18 @@ function OrderDetails() {
                     Order Date:{" "}
                     {new Date(orderData.orderDate).toLocaleDateString()}
                   </h3>
-                  <h3>Customer ID: {orderData.customer_ID}</h3>
+                  <h3>
+                    Customer ID: {orderData.customer_ID?.customer_ID || "N/A"}
+                  </h3>
                 </div>
                 <div>
                   <h3>Order ID: {orderData.orderID}</h3>
-                  <h3>Customer Name: {orderData.fName || "N/A"}</h3>
+                  <h3>
+                    Customer Name:{" "}
+                    {`${orderData.customer_ID?.fName || "N/A"} ${
+                      orderData.customer_ID?.lName || ""
+                    }`}
+                  </h3>
                 </div>
               </div>
               <TableContainer component={Paper}>
