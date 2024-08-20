@@ -49,20 +49,26 @@ function CreateOrder() {
       return total + parseFloat(item.price) * parseInt(item.quantity);
     }, 0);
 
-    // Format the order data
-    const formattedOrder = {
-      orderID: order.orderID,
-      orderDate: order.orderDate,
-      totalPrice: calculatedTotalPrice,
-      customer_ID: order.customerID,
-      orderDetails: order.items.map((item) => ({
-        productName: item.productName,
-        quantity: parseInt(item.quantity),
-        price: parseFloat(item.price),
-      })),
-    };
-
     try {
+      // Fetch the customer's ObjectID using the custom customerID
+      const customerResponse = await axios.get(
+        `http://localhost:3001/api/customers/by-customID/${order.customerID}`
+      );
+      const customerObjectID = customerResponse.data._id;
+
+      // Format the order data using the ObjectID for the customer_ID field
+      const formattedOrder = {
+        orderID: order.orderID,
+        orderDate: order.orderDate,
+        totalPrice: calculatedTotalPrice,
+        customer_ID: customerObjectID, // Use the ObjectID here
+        orderDetails: order.items.map((item) => ({
+          productName: item.productName,
+          quantity: parseInt(item.quantity),
+          price: parseFloat(item.price),
+        })),
+      };
+
       const response = await axios.post(
         "http://localhost:3001/api/orders",
         formattedOrder
