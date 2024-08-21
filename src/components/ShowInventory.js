@@ -1,17 +1,65 @@
-import React, { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Box, TextField, InputAdornment } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
-function ShowInventory() {
+function Customer() {
+  const drawerWidth = 280;
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
 
   const handleAddButtonClick = () => {
-    navigate("/add-product");
+    navigate("/add-customers");
   };
-  const drawerWidth = 280;
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/products")
+      .then((product) => {
+        console.log(product);
+        setProducts(product.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // const handleEdit = (id) => {
+  //   navigate(`/update-customer/${id}`);
+  // };
+
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`http://localhost:3001/api/customers/${id}`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setCustomers(customers.filter((customer) => customer._id !== id)); // Remove the deleted customer from state
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  const groupedProducts = products.reduce((acc, product) => {
+    const { categoryID, categoryName } = product;
+    if (!acc[categoryID]) {
+      acc[categoryID] = {
+        categoryID,
+        categoryName,
+        products: [],
+      };
+    }
+    acc[categoryID].products.push(product);
+    return acc;
+  }, {});
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -22,66 +70,68 @@ function ShowInventory() {
             flexGrow: 1,
             p: 10,
             mt: 5,
-            mb: 12,
+            mb: 5,
             mr: 3,
             ml: `${drawerWidth}px`,
             width: `calc(100% - ${drawerWidth}px)`,
             backgroundColor: "white",
             borderRadius: "24px",
-            height: "100vh",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "left",
-            }}
-          >
-            <TextField
-              id="outlined-basic"
-              placeholder="Search"
-              variant="outlined"
-              sx={{ mr: 2 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment>
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-                sx: {
-                  "& input": {
-                    paddingLeft: "8px",
-                  },
-                },
-              }}
-            />
-            <TextField
-              id="outlined-basic"
-              placeholder="Sort"
-              variant="outlined"
-              sx={{ width: 100, mr: 2 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment>
-                    <SwapVertIcon />
-                  </InputAdornment>
-                ),
-                sx: {
-                  "& input": {
-                    paddingLeft: "8px",
-                  },
-                },
-              }}
-            />
-            <Button onClick={handleAddButtonClick} variant="contained">
-              Add
-            </Button>
-          </Box>
+          <h2>Product List</h2>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Category ID</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Product</TableCell>
+                  <TableCell>Quantity</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products.map((product) => (
+                  <TableRow key={product._id}>
+                    <TableCell>{product.categoryID}</TableCell>
+                    <TableCell>{product.categoryName}</TableCell>
+                    <TableCell>
+                      {category.products.map((product, idx) => (
+                        <div key={idx}>{product.productName}</div>
+                      ))}
+                    </TableCell>
+                    <TableCell>
+                      {category.products.map((product, idx) => (
+                        <div key={idx}>{product.quantity}</div>
+                      ))}
+                    </TableCell>
+                    {/* <TableCell>
+                      <Button onClick={() => handleEdit(customer._id)}>
+                        <EditIcon />
+                      </Button>
+                      <Button onClick={() => handleDelete(customer._id)}>
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell> */}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
+        <Button
+          onClick={handleAddButtonClick}
+          variant="contained"
+          sx={{
+            position: "absolute",
+            bottom: "20px",
+            right: "20px",
+          }}
+        >
+          Add Product
+        </Button>
       </Box>
     </Box>
   );
 }
 
-export default ShowInventory;
+export default Customer;
