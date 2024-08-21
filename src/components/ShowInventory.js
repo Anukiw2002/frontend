@@ -11,55 +11,60 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
-function Customer() {
+function ShowInventory() {
   const drawerWidth = 280;
-  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-
-  const handleAddButtonClick = () => {
-    navigate("/add-customers");
-  };
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch products
     axios
       .get("http://localhost:3001/api/products")
-      .then((product) => {
-        console.log(product);
-        setProducts(product.data);
+      .then((response) => {
+        // console.log("Fetched Products:", response.data); // Log products
+        setProducts(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
+
+    // Fetch categories
+    axios
+      .get("http://localhost:3001/api/categories")
+      .then((response) => {
+        // console.log("Fetched Categories:", response.data); // Log categories
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the categories!", error);
+      });
   }, []);
 
-  // const handleEdit = (id) => {
-  //   navigate(`/update-customer/${id}`);
-  // };
+  const handleAddButtonClick = () => {
+    navigate("/add-product");
+  };
 
-  // const handleDelete = (id) => {
-  //   axios
-  //     .delete(`http://localhost:3001/api/customers/${id}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setCustomers(customers.filter((customer) => customer._id !== id)); // Remove the deleted customer from state
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
+  // Group products by categoryID and include categoryName
   const groupedProducts = products.reduce((acc, product) => {
-    const { categoryID, categoryName } = product;
+    const { categoryID } = product;
+    const category = categories.find(
+      (cat) => String(cat.categoryID) === String(categoryID)
+    );
     if (!acc[categoryID]) {
       acc[categoryID] = {
         categoryID,
-        categoryName,
+        categoryName: category ? category.categoryName : "N/A",
         products: [],
       };
     }
+
     acc[categoryID].products.push(product);
     return acc;
   }, {});
+  console.log(groupedProducts);
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -84,36 +89,30 @@ function Customer() {
               <TableHead>
                 <TableRow>
                   <TableCell>Category ID</TableCell>
-                  <TableCell>Category</TableCell>
-                  <TableCell>Product</TableCell>
-                  <TableCell>Quantity</TableCell>
+                  <TableCell>Category Name</TableCell>
+                  <TableCell>Product Names</TableCell>
+                  <TableCell>Quantities</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product._id}>
-                    <TableCell>{product.categoryID}</TableCell>
-                    <TableCell>{product.categoryName}</TableCell>
-                    <TableCell>
-                      {category.products.map((product, idx) => (
-                        <div key={idx}>{product.productName}</div>
-                      ))}
-                    </TableCell>
-                    <TableCell>
-                      {category.products.map((product, idx) => (
-                        <div key={idx}>{product.quantity}</div>
-                      ))}
-                    </TableCell>
-                    {/* <TableCell>
-                      <Button onClick={() => handleEdit(customer._id)}>
-                        <EditIcon />
-                      </Button>
-                      <Button onClick={() => handleDelete(customer._id)}>
-                        <DeleteIcon />
-                      </Button>
-                    </TableCell> */}
-                  </TableRow>
-                ))}
+                {Object.values(groupedProducts).map((group) =>
+                  group.products.map((product, idx) => (
+                    <TableRow key={`${group.categoryID}-${idx}`}>
+                      {idx === 0 ? (
+                        <>
+                          <TableCell rowSpan={group.products.length}>
+                            {group.categoryID}
+                          </TableCell>
+                          <TableCell rowSpan={group.products.length}>
+                            {group.categoryName}
+                          </TableCell>
+                        </>
+                      ) : null}
+                      <TableCell>{product.productName}</TableCell>
+                      <TableCell>{product.quantity}</TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -134,4 +133,4 @@ function Customer() {
   );
 }
 
-export default Customer;
+export default ShowInventory;

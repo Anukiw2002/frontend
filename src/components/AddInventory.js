@@ -53,7 +53,6 @@ function AddInventory() {
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-category"
-              select
               label="Select Product Category"
               value={productCategory}
               onChange={handleCategoryChange}

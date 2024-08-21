@@ -5,6 +5,7 @@ import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
+import axios from "axios";
 
 function AddInventory() {
   const [productID, setProductID] = useState("");
@@ -14,35 +15,43 @@ function AddInventory() {
   const [sellingPrice, setSellingPrice] = useState("");
   const [categoryID, setCategoryID] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (event) event.preventDefault();
 
-    axios
-      .post("http://localhost:3001/api/products", {
+    try {
+      // First, update or add the category details
+      await axios.post("http://localhost:3001/api/categories", {
+        categoryID,
+        categoryName,
+      });
+
+      // Then, update the product details
+      await axios.post("http://localhost:3001/api/products", {
         productID,
         productName,
         categoryID,
         categoryName,
         quantity,
         sellingPrice,
-      })
-      .then((result) => {
-        console.log(result);
-        // Clear the form
-        setProductID("");
-        setProductName("");
-        setCategoryID("");
-        setCategoryName("");
-        setQuantity("");
-        setSellingPrice("");
-      })
-      .catch((err) =>
-        console.error(
-          "Error submitting form:",
-          err.response ? err.response.data : err.message
-        )
+      });
+
+      console.log("Category and Product details added successfully!");
+
+      // Clear the form
+      setProductID("");
+      setProductName("");
+      setCategoryID("");
+      setCategoryName("");
+      setQuantity("");
+      setSellingPrice("");
+    } catch (err) {
+      console.error(
+        "Error submitting form:",
+        err.response ? err.response.data : err.message
       );
+    }
   };
+
   const drawerWidth = 280;
 
   return (
@@ -63,6 +72,16 @@ function AddInventory() {
           }}
         >
           <h2>Products Details</h2>
+          <Box sx={{ mb: 3 }}>
+            <TextField
+              id="filled-category-id"
+              label="Enter Category ID"
+              variant="filled"
+              fullWidth
+              value={categoryID}
+              onChange={(e) => setCategoryID(e.target.value)}
+            />
+          </Box>
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-id"
@@ -87,20 +106,11 @@ function AddInventory() {
             <TextField
               id="filled-product-category"
               label="Select Product Category"
-              value={productCategory}
-              onChange={(e) => setProductCategory(e.target.value)}
+              variant="filled"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               fullWidth
             ></TextField>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <TextField
-              id="filled-inventory-quantity"
-              label="Quantity"
-              variant="filled"
-              fullWidth
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-            />
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
