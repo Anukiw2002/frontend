@@ -33,16 +33,7 @@ function AddInventory() {
           }}
         >
           <h2>Add Stock levels</h2>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="date-picker"
-              label="Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
-            />
-          </Box>
+
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-id"
@@ -62,17 +53,20 @@ function AddInventory() {
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-category"
-              select
               label="Select Product Category"
               value={productCategory}
               onChange={handleCategoryChange}
               variant="filled"
               fullWidth
-            >
-              <MenuItem value="Electronics">Electronics</MenuItem>
-              <MenuItem value="Apparel">Apparel</MenuItem>
-              <MenuItem value="Home Goods">Home Goods</MenuItem>
-            </TextField>
+            ></TextField>
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              id="filled-selling-price"
+              label="Selling Price"
+              variant="filled"
+              fullWidth
+            />
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
