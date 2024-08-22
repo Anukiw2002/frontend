@@ -15,6 +15,7 @@ function UpdateOrder() {
     orderDate: "",
     totalPrice: 0,
     customer_ID: "",
+    customerCustomID: "",
     orderDetails: [],
   });
 
@@ -23,10 +24,19 @@ function UpdateOrder() {
       .get(`http://localhost:3001/api/orders/${id}`)
       .then((res) => {
         const orderData = res.data;
-        setOrder({
-          ...orderData,
-          orderDate: new Date(orderData.orderDate).toISOString().split("T")[0],
-        });
+        // Fetch customer data
+        return axios
+          .get(`http://localhost:3001/api/customers/${orderData.customer_ID}`)
+          .then((customerRes) => {
+            const customerData = customerRes.data;
+            setOrder({
+              ...orderData,
+              orderDate: new Date(orderData.orderDate)
+                .toISOString()
+                .split("T")[0],
+              customerCustomID: customerData.customer_ID, // Set the custom customer ID
+            });
+          });
       })
       .catch((err) => {
         console.error("Error fetching order data:", err);
@@ -67,7 +77,12 @@ function UpdateOrder() {
       return sum + item.price * item.quantity;
     }, 0);
 
-    const updatedOrder = { ...order, totalPrice: calculatedTotalPrice };
+    const updatedOrder = {
+      ...order,
+      totalPrice: calculatedTotalPrice,
+      // Don't include customerCustomID in the update
+      customerCustomID: undefined,
+    };
 
     axios
       .put(`http://localhost:3001/api/orders/${id}`, updatedOrder)
@@ -141,10 +156,11 @@ function UpdateOrder() {
               variant="outlined"
               fullWidth
               margin="normal"
-              name="customer_ID"
-              value={order.customer_ID}
+              name="customerCustomID"
+              value={order.customerCustomID}
               onChange={handleChange}
               required
+              disabled // Make this field read-only
             />
 
             <div>
