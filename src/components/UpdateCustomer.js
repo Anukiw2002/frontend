@@ -10,6 +10,7 @@ function UpdateCustomer() {
   const navigate = useNavigate();
   const drawerWidth = 280;
 
+  const [customer_ID, setCustomerID] = useState("");
   const [fName, setfName] = useState("");
   const [lName, setlName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ function UpdateCustomer() {
       .get(`http://localhost:3001/api/customers/${id}`)
       .then((res) => {
         const customer = res.data;
+        setCustomerID(customer.customer_ID || "");
         setfName(customer.fName || "");
         setlName(customer.lName || "");
         setEmail(customer.email || "");
@@ -37,6 +39,7 @@ function UpdateCustomer() {
 
     axios
       .put(`http://localhost:3001/api/customers/${id}`, {
+        customer_ID,
         fName,
         lName,
         email,
@@ -75,6 +78,16 @@ function UpdateCustomer() {
           <h2>Update Customer</h2>
           <Box sx={{ mb: 4 }}>
             <TextField
+              id="customer_ID"
+              label="Customer ID"
+              variant="filled"
+              fullWidth
+              value={customer_ID}
+              disabled // Make this field read-only
+            />
+          </Box>
+          <Box sx={{ mb: 4 }}>
+            <TextField
               id="fName"
               label="First Name"
               variant="filled"
@@ -95,7 +108,7 @@ function UpdateCustomer() {
           </Box>
           <Box sx={{ mb: 4 }}>
             <TextField
-              id="contactNumber"
+              id="contact_number"
               label="Contact Number"
               variant="filled"
               fullWidth

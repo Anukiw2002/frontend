@@ -44,16 +44,24 @@ function CreateOrder() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Calculate total price
+    if (!order.customerID.trim()) {
+      alert("Please enter a valid Customer ID");
+      return;
+    }
+
     const calculatedTotalPrice = order.items.reduce((total, item) => {
       return total + parseFloat(item.price) * parseInt(item.quantity);
     }, 0);
 
     try {
-      // Fetch the customer's ObjectID using the custom customerID
       const customerResponse = await axios.get(
         `http://localhost:3001/api/customers/by-customID/${order.customerID}`
       );
+
+      if (!customerResponse.data || !customerResponse.data._id) {
+        throw new Error("Customer not found");
+      }
+
       const customerObjectID = customerResponse.data._id;
 
       // Format the order data using the ObjectID for the customer_ID field
@@ -61,14 +69,13 @@ function CreateOrder() {
         orderID: order.orderID,
         orderDate: order.orderDate,
         totalPrice: calculatedTotalPrice,
-        customer_ID: customerObjectID, // Use the ObjectID here
+        customer_ID: customerObjectID, // This should match your Order model field name
         orderDetails: order.items.map((item) => ({
           productName: item.productName,
           quantity: parseInt(item.quantity),
           price: parseFloat(item.price),
         })),
       };
-
       const response = await axios.post(
         "http://localhost:3001/api/orders",
         formattedOrder
@@ -80,9 +87,7 @@ function CreateOrder() {
         "Error creating order:",
         error.response ? error.response.data : error.message
       );
-      // You might want to show an error message to the user here
-      // For example:
-      // setErrorMessage("Failed to create order. Please try again.");
+      alert(error.response ? error.response.data.message : error.message);
     }
   };
 
