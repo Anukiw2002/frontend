@@ -12,6 +12,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function ShowInventory() {
   const drawerWidth = 280;
@@ -90,6 +92,7 @@ function ShowInventory() {
                 <TableRow>
                   <TableCell>Category ID</TableCell>
                   <TableCell>Category Name</TableCell>
+                  <TableCell>Product ID</TableCell>
                   <TableCell>Product Names</TableCell>
                   <TableCell>Quantities</TableCell>
                 </TableRow>
@@ -108,8 +111,17 @@ function ShowInventory() {
                           </TableCell>
                         </>
                       ) : null}
+                      <TableCell>{product.productID}</TableCell>
                       <TableCell>{product.productName}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
+                      <TableCell>
+                        <Button>
+                          <EditIcon />
+                        </Button>
+                        <Button>
+                          <DeleteIcon />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

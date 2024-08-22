@@ -21,6 +21,7 @@ import CreateOrder from "./components/CreateOrder";
 import Customer from "./components/Customer";
 import UpdateCustomer from "./components/UpdateCustomer";
 import UpdateOrder from "./components/UpdateOrder";
+import UpdateProduct from "./components/UpdateProduct";
 
 function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
         <Route path="/orderdetails/:id" element={<OrderDetails />} />
         <Route path="/update-customer/:id" element={<UpdateCustomer />} />
         <Route path="/update-order/:id" element={<UpdateOrder />} />
+        <Route path="/update-product/:id" element={<UpdateProduct />} />
       </Routes>
     </>
   );

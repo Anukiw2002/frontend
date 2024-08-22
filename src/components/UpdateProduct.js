@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-//import MenuItem from "@mui/material/MenuItem";
+import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
@@ -8,7 +8,7 @@ import "../css/CtaButton.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function AddInventory() {
+function UpdateProduct() {
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -143,4 +143,4 @@ function AddInventory() {
   );
 }
 
-export default AddInventory;
+export default UpdateProduct;
