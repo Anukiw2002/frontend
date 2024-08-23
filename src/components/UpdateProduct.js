@@ -1,70 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
-import "../css/InputField.css";
-import "../css/CtaButton.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateProduct() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const drawerWidth = 280;
+
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
-  const [categoryName, setCategoryName] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [categoryID, setCategoryID] = useState("");
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/products/${id}`)
+      .then((res) => {
+        const product = res.data;
+        setProductID(product.productID || "");
+        setProductName(product.productName || "");
+        setQuantity(product.quantity || "");
+      })
+      .catch((err) => {
+        console.error("Error fetching product data:", err);
+      });
+  }, [id]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     if (event) event.preventDefault();
 
-    try {
-      // Check if the category exists or create it if not
-      const categoryResponse = await axios.post(
-        "http://localhost:3001/api/categories/check-or-create",
-        {
-          categoryID,
-          categoryName,
-        }
-      );
-
-      if (categoryResponse.status === 200 || categoryResponse.status === 201) {
-        // Proceed to add or update the product
-        const productResponse = await axios.post(
-          "http://localhost:3001/api/products",
-          {
-            productID,
-            productName,
-            categoryID,
-            quantity,
-          }
-        );
-
-        console.log(
-          "Product added or updated successfully!",
-          productResponse.data
-        );
-
-        // Clear the form
-        setProductID("");
-        setProductName("");
-        setCategoryID("");
-        setCategoryName("");
-        setQuantity("");
-
+    axios
+      .put(`http://localhost:3001/api/products/${id}`, {
+        productID,
+        productName,
+        quantity,
+      })
+      .then((result) => {
+        console.log(result);
         navigate("/show-products");
-      }
-    } catch (err) {
-      console.error(
-        "Error submitting form:",
-        err.response ? err.response.data : err.message
+      })
+      .catch((err) =>
+        console.error(
+          "Error updating product:",
+          err.response ? err.response.data : err.message
+        )
       );
-    }
   };
-
-  const drawerWidth = 280;
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -74,8 +57,8 @@ function UpdateProduct() {
           sx={{
             flexGrow: 1,
             p: 10,
-            mt: 6,
-            mb: 6,
+            mt: 5,
+            mb: 5,
             mr: 3,
             ml: `${drawerWidth}px`,
             width: `calc(100% - ${drawerWidth}px)`,
@@ -83,30 +66,20 @@ function UpdateProduct() {
             borderRadius: "24px",
           }}
         >
-          <h2>Products Details</h2>
-          <Box sx={{ mb: 3 }}>
+          <h2>Update Product</h2>
+          <Box sx={{ mb: 4 }}>
             <TextField
-              id="filled-category-id"
-              label="Enter Category ID"
-              variant="filled"
-              fullWidth
-              value={categoryID}
-              onChange={(e) => setCategoryID(e.target.value)}
-            />
-          </Box>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="filled-product-id"
-              label="Enter Product ID"
+              id="prodyctID"
+              label="Product ID"
               variant="filled"
               fullWidth
               value={productID}
               onChange={(e) => setProductID(e.target.value)}
             />
           </Box>
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
-              id="filled-product-name"
+              id="productName"
               label="Product Name"
               variant="filled"
               fullWidth
@@ -114,19 +87,9 @@ function UpdateProduct() {
               onChange={(e) => setProductName(e.target.value)}
             />
           </Box>
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 4 }}>
             <TextField
-              id="filled-product-category"
-              label="Select Product Category"
-              variant="filled"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              fullWidth
-            ></TextField>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <TextField
-              id="filled-selling-price"
+              id="quantity"
               label="Quantity"
               variant="filled"
               fullWidth
@@ -135,7 +98,7 @@ function UpdateProduct() {
             />
           </Box>
           <Box className="cta-container">
-            <CtaButton onClick={handleSubmit} ctaName="Add" />
+            <CtaButton onClick={handleSubmit} ctaName="Update" />
           </Box>
         </Box>
       </Box>
