@@ -66,7 +66,21 @@ function ShowInventory() {
     acc[categoryID].products.push(product);
     return acc;
   }, {});
-  console.log(groupedProducts);
+  // console.log(groupedProducts);
+
+  const handleEdit = (id) => {
+    navigate(`/update-product/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:3001/api/products/${id}`)
+      .then((res) => {
+        console.log(res);
+        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted customer from state
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -115,10 +129,10 @@ function ShowInventory() {
                       <TableCell>{product.productName}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
                       <TableCell>
-                        <Button>
+                        <Button onClick={() => handleEdit(product._id)}>
                           <EditIcon />
                         </Button>
-                        <Button>
+                        <Button onClick={() => handleDelete(product._id)}>
                           <DeleteIcon />
                         </Button>
                       </TableCell>
@@ -129,17 +143,6 @@ function ShowInventory() {
             </Table>
           </TableContainer>
         </Box>
-        <Button
-          onClick={handleAddButtonClick}
-          variant="contained"
-          sx={{
-            position: "absolute",
-            bottom: "20px",
-            right: "20px",
-          }}
-        >
-          Add Product
-        </Button>
       </Box>
     </Box>
   );
