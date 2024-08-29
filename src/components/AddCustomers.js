@@ -35,6 +35,7 @@ function AddCustomer() {
         setEmail("");
         setAddress("");
         setContactNumber("");
+        
       })
       .catch((err) =>
         console.error(
