@@ -5,13 +5,44 @@ import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddInventory() {
-  const [productCategory, setProductCategory] = useState("");
+  const [productID, setProductID] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [date, setDate] = useState("");
 
-  const handleCategoryChange = (event) => {
-    setProductCategory(event.target.value);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleSubmit = (event) => {
+    if (event) event.preventDefault();
+  
+    // Convert date to ISO 8601 format
+    const isoDate = new Date(date).toISOString();
+  
+    axios
+      .post("http://localhost:3001/api/products/add-sellingprice-date", {
+        productID,
+        date: isoDate,
+        sellingPrice,
+      })
+      .then(() => {
+        // Clear the form
+        setProductID("");
+        setDate("");
+        setSellingPrice("");
+  
+        navigate('/show-employee-inventory');
+      })
+      .catch((err) =>
+        console.error(
+          "Error submitting form:",
+          err.response ? err.response.data : err.message
+        )
+      );
   };
+  
 
   const drawerWidth = 280;
 
@@ -32,7 +63,7 @@ function AddInventory() {
             borderRadius: "24px",
           }}
         >
-          <h2>Add Stock levels</h2>
+          <h2>Add Inventory</h2>
 
           <Box sx={{ mb: 3 }}>
             <TextField
@@ -40,44 +71,36 @@ function AddInventory() {
               label="Enter Product ID"
               variant="filled"
               fullWidth
+              value={productID}
+              onChange={(e) => setProductID(e.target.value)}
             />
-          </Box>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="filled-product-name"
-              label="Product Name"
-              variant="filled"
-              fullWidth
-            />
-          </Box>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="filled-product-category"
-              label="Select Product Category"
-              value={productCategory}
-              onChange={handleCategoryChange}
-              variant="filled"
-              fullWidth
-            ></TextField>
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
-              id="filled-selling-price"
+              id="selling-price"
               label="Selling Price"
               variant="filled"
               fullWidth
+              value={sellingPrice}
+              onChange={(e) => setSellingPrice(e.target.value)}
             />
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
-              id="filled-inventory-quantity"
-              label="Inventory Quantity"
+              id="date"
+              label="Date"
               variant="filled"
+              type="date"
               fullWidth
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </Box>
           <Box className="cta-container">
-            <CtaButton ctaName="Add" />
+            <CtaButton ctaName="Add" onClick={handleSubmit}/>
           </Box>
         </Box>
       </Box>

@@ -14,6 +14,7 @@ import AddInventory from "./components/AddInventory";
 import AddProduct from "./components/AddProducts";
 import AddCustomer from "./components/AddCustomers";
 import ShowInventory from "./components/ShowInventory";
+import ShowEmployeeInventory from "./components/ShowEmployeeInventory";
 import NavBar from "./components/NavBar";
 import OrderHistory from "./components/OderHistory";
 import OrderDetails from "./components/OrderDetails";
@@ -44,6 +45,7 @@ function App() {
         <Route path="/loginemployee" element={<LogInEmployee />} />
         <Route path="/loginmanager" element={<LogInManager />} />
         <Route path="/show-products" element={<ShowInventory />} />
+        <Route path="/show-employee-inventory" element={<ShowEmployeeInventory />} />
         <Route path="/add-inventory" element={<AddInventory />} />
         <Route path="/customers" element={<Customer />} />
         <Route path="/add-customers" element={<AddCustomer />} />
