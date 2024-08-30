@@ -38,19 +38,19 @@ function ShowEmployeeInventory() {
     navigate("/add-inventory");
   };
 
-//   const handleEdit = (id) => {
-//     navigate(`/update-product/${id}`);
-//   };
+  const handleEdit = (id) => {
+    navigate(`/update-inventory/${id}`);
+  };
 
-//   const handleDelete = (id) => {
-//     axios
-//       .delete(`http://localhost:3001/api/products/${id}`)
-//       .then((res) => {
-//         console.log(res);
-//         setProducts(products.filter((product) => product._id !== id)); // Remove the deleted customer from state
-//       })
-//       .catch((err) => console.log(err));
-//   };
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:3001/api/products/${id}`)
+      .then((res) => {
+        console.log(res);
+        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted customer from state
+      })
+      .catch((err) => console.log(err));
+  };
 
 const formatDate = (isoDate) => {
   if (!isoDate) {
@@ -98,14 +98,14 @@ const formatDate = (isoDate) => {
                         <TableCell>{formatDate(product.date)}</TableCell>
                         <TableCell>{product.quantity}</TableCell>
                         <TableCell>{product.sellingPrice}</TableCell>
-                      {/* <TableCell>
+                      <TableCell>
                         <Button onClick={() => handleEdit(product._id)}>
                           <EditIcon />
                         </Button>
                         <Button onClick={() => handleDelete(product._id)}>
                           <DeleteIcon />
                         </Button>
-                      </TableCell> */}
+                      </TableCell>
                     </TableRow>
                   )
                 )}
