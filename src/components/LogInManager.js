@@ -14,7 +14,7 @@ function LogInManager() {
         <p className="signUp">Log in</p>
         <InputField detail="Manager ID:" inputLabel="Enter your ID..." />
         <InputField detail="Password:" inputLabel="Enter your password..." />
-        <Button action="Log In" link="/show-products" />
+        <Button action="Log In" link="/add-inventory" />
         <p className="loginPrompt">
           Not registered yet? <Link to="/signup-manager"> Sign Up </Link>
         </p>

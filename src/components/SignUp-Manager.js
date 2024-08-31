@@ -18,7 +18,7 @@ function SignUpManager() {
           detail="Re-enter Password:"
           inputLabel="Enter your password..."
         />
-        <Button action="Sign Up" link="/show-products" />
+        <Button action="Sign Up" link="/add-inventory" />
         <p className="loginPrompt">
           Already have an account? <Link to="/loginmanager"> Login </Link>
         </p>

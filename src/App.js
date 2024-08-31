@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,7 +15,8 @@ import AddProduct from "./components/AddProducts";
 import AddCustomer from "./components/AddCustomers";
 import ShowInventory from "./components/ShowInventory";
 import ShowEmployeeInventory from "./components/ShowEmployeeInventory";
-import NavBar from "./components/NavBar";
+import NavBarEmployee from "./components/NavBarEmployee";
+import NavBarManager from "./components/NavBarManager";
 import OrderHistory from "./components/OderHistory";
 import OrderDetails from "./components/OrderDetails";
 import CreateOrder from "./components/CreateOrder";
@@ -25,9 +26,9 @@ import UpdateOrder from "./components/UpdateOrder";
 import UpdateProduct from "./components/UpdateProduct";
 import UpdateInventory from "./components/UpdateInventory";
 
-
 function App() {
   const location = useLocation();
+  const [userRole, setUserRole] = useState("employee"); // Set a default user role for testing
 
   const hideNavBarPaths = [
     "/",
@@ -37,9 +38,33 @@ function App() {
     "/loginmanager",
   ];
 
+  const renderNavBar = () => {
+    if (hideNavBarPaths.includes(location.pathname)) return null;
+
+    if (userRole === "employee") return <NavBarEmployee />;
+    if (userRole === "manager") return <NavBarManager />;
+
+    return null;
+  };
+
+  // Temporary buttons to switch user roles for testing
+  const handleSetRole = (role) => {
+    setUserRole(role);
+  };
+
   return (
     <>
-      {!hideNavBarPaths.includes(location.pathname) && <NavBar />}
+      {/* Temporary UI for changing user roles */}
+      <div style={{ padding: "10px" }}>
+        <button onClick={() => handleSetRole("employee")}>
+          Set Employee Role
+        </button>
+        <button onClick={() => handleSetRole("manager")}>
+          Set Manager Role
+        </button>
+      </div>
+
+      {renderNavBar()}
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/signup-employee" element={<SignUpEmployee />} />
@@ -47,7 +72,10 @@ function App() {
         <Route path="/loginemployee" element={<LogInEmployee />} />
         <Route path="/loginmanager" element={<LogInManager />} />
         <Route path="/show-products" element={<ShowInventory />} />
-        <Route path="/show-employee-inventory" element={<ShowEmployeeInventory />} />
+        <Route
+          path="/show-employee-inventory"
+          element={<ShowEmployeeInventory />}
+        />
         <Route path="/add-inventory" element={<AddInventory />} />
         <Route path="/customers" element={<Customer />} />
         <Route path="/add-customers" element={<AddCustomer />} />
