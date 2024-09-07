@@ -1,39 +1,42 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
+import CtaButton from "../components/CtaButton";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function AddInventory() {
+  // State for each field
   const [productID, setProductID] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
+  const [quantity, setQuantity] = useState(""); // Added separate state for quantity
   const [date, setDate] = useState("");
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
-  
+
     // Convert date to ISO 8601 format
     const isoDate = new Date(date).toISOString();
-  
+
     axios
       .post("http://localhost:3001/api/products/add-sellingprice-date", {
         productID,
         date: isoDate,
         sellingPrice,
+        quantity, // Add quantity to request
       })
       .then(() => {
         // Clear the form
         setProductID("");
         setDate("");
         setSellingPrice("");
-  
-        navigate('/show-employee-inventory');
+        setQuantity(""); // Clear quantity
+
+        navigate("/show-employee-inventory");
       })
       .catch((err) =>
         console.error(
@@ -42,12 +45,11 @@ function AddInventory() {
         )
       );
   };
-  
 
   const drawerWidth = 280;
 
   return (
-    <Box sx={{ backgroundColor: "lightgray" }}>
+    <Box sx={{ backgroundColor: "lightgray", minHeight: "100vh" }}>
       <Box sx={{ display: "flex" }}>
         <Box
           component="main"
@@ -87,6 +89,16 @@ function AddInventory() {
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
+              id="quantity"
+              label="Quantity"
+              variant="filled"
+              fullWidth
+              value={quantity} // Bound to the quantity state
+              onChange={(e) => setQuantity(e.target.value)} // Updates quantity state
+            />
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <TextField
               id="date"
               label="Date"
               variant="filled"
@@ -100,7 +112,7 @@ function AddInventory() {
             />
           </Box>
           <Box className="cta-container">
-            <CtaButton ctaName="Add" onClick={handleSubmit}/>
+            <CtaButton ctaName="Add" onClick={handleSubmit} />
           </Box>
         </Box>
       </Box>

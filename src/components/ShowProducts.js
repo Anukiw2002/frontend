@@ -15,10 +15,10 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function ShowEmployeeInventory() {
+function ShowInventory() {
   const drawerWidth = 280;
   const [products, setProducts] = useState([]);
-//   const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,14 +32,44 @@ function ShowEmployeeInventory() {
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
       });
+
+    // Fetch categories
+    axios
+      .get("http://localhost:3001/api/categories")
+      .then((response) => {
+        // console.log("Fetched Categories:", response.data); // Log categories
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the categories!", error);
+      });
   }, []);
 
   const handleAddButtonClick = () => {
-    navigate("/add-inventory");
+    navigate("/add-product");
   };
 
+  // Group products by categoryID and include categoryName
+  const groupedProducts = products.reduce((acc, product) => {
+    const { categoryID } = product;
+    const category = categories.find(
+      (cat) => String(cat.categoryID) === String(categoryID)
+    );
+    if (!acc[categoryID]) {
+      acc[categoryID] = {
+        categoryID,
+        categoryName: category ? category.categoryName : "N/A",
+        products: [],
+      };
+    }
+
+    acc[categoryID].products.push(product);
+    return acc;
+  }, {});
+  // console.log(groupedProducts);
+
   const handleEdit = (id) => {
-    navigate(`/update-inventory/${id}`);
+    navigate(`/update-product/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -51,13 +81,6 @@ function ShowEmployeeInventory() {
       })
       .catch((err) => console.log(err));
   };
-
-const formatDate = (isoDate) => {
-  if (!isoDate) {
-    return ""; // Return an empty string or a default value if isoDate is undefined
-  }
-  return isoDate.split('T')[0]; // Extracts the date in YYYY-MM-DD format
-};
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -81,23 +104,30 @@ const formatDate = (isoDate) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Product ID</TableCell>
-                  <TableCell>Product</TableCell>
                   <TableCell>Category ID</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Quantitiy</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Category Name</TableCell>
+                  <TableCell>Product ID</TableCell>
+                  <TableCell>Product Names</TableCell>
+                  <TableCell>Quantities</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
-                    <TableRow>
-                        <TableCell>{product.productID}</TableCell>
-                        <TableCell>{product.productName}</TableCell>
-                        <TableCell>{product.categoryID}</TableCell>
-                        <TableCell>{formatDate(product.date)}</TableCell>
-                        <TableCell>{product.quantity}</TableCell>
-                        <TableCell>{product.sellingPrice}</TableCell>
+                {Object.values(groupedProducts).map((group) =>
+                  group.products.map((product, idx) => (
+                    <TableRow key={`${group.categoryID}-${idx}`}>
+                      {idx === 0 ? (
+                        <>
+                          <TableCell rowSpan={group.products.length}>
+                            {group.categoryID}
+                          </TableCell>
+                          <TableCell rowSpan={group.products.length}>
+                            {group.categoryName}
+                          </TableCell>
+                        </>
+                      ) : null}
+                      <TableCell>{product.productID}</TableCell>
+                      <TableCell>{product.productName}</TableCell>
+                      <TableCell>{product.quantity}</TableCell>
                       <TableCell>
                         <Button onClick={() => handleEdit(product._id)}>
                           <EditIcon />
@@ -107,7 +137,7 @@ const formatDate = (isoDate) => {
                         </Button>
                       </TableCell>
                     </TableRow>
-                  )
+                  ))
                 )}
               </TableBody>
             </Table>
@@ -118,4 +148,4 @@ const formatDate = (isoDate) => {
   );
 }
 
-export default ShowEmployeeInventory;
+export default ShowInventory;

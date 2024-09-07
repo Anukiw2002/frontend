@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -12,31 +12,34 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import techSLlogo from "../pictures/Logo.png";
+import { AuthContext } from "./AuthContext";
 
 const drawerWidth = 240;
 
 const NavBarManager = () => {
+  const { logout } = useContext(AuthContext); // Access logout function from AuthContext
+  const navigate = useNavigate(); // Use navigate for redirection after logout
+
+  const handleLogout = () => {
+    logout(); // Call the logout function from AuthContext
+    navigate("/"); // Redirect to homepage after logout
+  };
+
   const drawerItems = [
     {
       text: "Inventory",
       icon: <InventoryIcon />,
-      path: "/show-employee-inventory",
+      path: "/show-products",
     },
-    { text: "Add Category", icon: <LaptopMacIcon />, path: "/add-inventory" },
+    { text: "Add Category", icon: <LaptopMacIcon />, path: "/add-product" },
     { text: "Customers", icon: <PersonIcon />, path: "/customers" },
     {
       text: "Orders",
       icon: <ShoppingCartOutlinedIcon />,
       path: "/orderhistory",
     },
-  ];
-
-  const settingsItems = [
-    { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
-    { text: "Log out", icon: <LogoutIcon />, path: "/logout" },
   ];
 
   return (
@@ -82,18 +85,17 @@ const NavBarManager = () => {
           ))}
         </List>
         <List>
-          {settingsItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton
-                component={Link}
-                to={item.path}
-                sx={{ my: 1, mx: 2 }}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={handleLogout} // Trigger the handleLogout on click
+              sx={{ my: 1, mx: 2 }}
+            >
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log out" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
     </Box>
