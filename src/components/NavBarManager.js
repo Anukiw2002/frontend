@@ -18,7 +18,7 @@ import techSLlogo from "../pictures/Logo.png";
 
 const drawerWidth = 240;
 
-const NavBar = () => {
+const NavBarManager = () => {
   const drawerItems = [
     {
       text: "Inventory",
@@ -100,4 +100,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarManager;

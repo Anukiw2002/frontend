@@ -20,7 +20,7 @@ import techSLlogo from "../pictures/Logo.png";
 
 const drawerWidth = 240;
 
-const NavBar = () => {
+const NavBarEmployee = () => {
   const drawerItems = [
     {
       text: "Inventory",
@@ -40,7 +40,7 @@ const NavBar = () => {
 
   const settingsItems = [
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
-    { text: "Log out", icon: <LogoutIcon />, path: "/logout" },
+    { text: "Log out", icon: <LogoutIcon />, path: "/" },
   ];
 
   return (
@@ -104,4 +104,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarEmployee;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,11 +25,13 @@ import UpdateCustomer from "./components/UpdateCustomer";
 import UpdateOrder from "./components/UpdateOrder";
 import UpdateProduct from "./components/UpdateProduct";
 import UpdateInventory from "./components/UpdateInventory";
+import { AuthContext, AuthProvider } from "./components/AuthContext"; // Import context
 
 function App() {
   const location = useLocation();
-  const [userRole, setUserRole] = useState("employee"); // Set a default user role for testing
+  const { userRole } = useContext(AuthContext); // Get the user role from context
 
+  // Define paths where navbars should be hidden (like sign-in/sign-up pages)
   const hideNavBarPaths = [
     "/",
     "/signup-employee",
@@ -38,32 +40,23 @@ function App() {
     "/loginmanager",
   ];
 
+  // Function to render the navbar based on userRole
   const renderNavBar = () => {
+    console.log("Current user role:", userRole); // Log to check current role
+
     if (hideNavBarPaths.includes(location.pathname)) return null;
 
-    if (userRole === "employee") return <NavBarEmployee />;
-    if (userRole === "manager") return <NavBarManager />;
+    if (userRole === "employee") {
+      return <NavBarEmployee />;
+    } else if (userRole === "manager") {
+      return <NavBarManager />;
+    }
 
     return null;
   };
 
-  // Temporary buttons to switch user roles for testing
-  const handleSetRole = (role) => {
-    setUserRole(role);
-  };
-
   return (
     <>
-      {/* Temporary UI for changing user roles */}
-      <div style={{ padding: "10px" }}>
-        <button onClick={() => handleSetRole("employee")}>
-          Set Employee Role
-        </button>
-        <button onClick={() => handleSetRole("manager")}>
-          Set Manager Role
-        </button>
-      </div>
-
       {renderNavBar()}
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -94,9 +87,11 @@ function App() {
 
 function AppWrapper() {
   return (
-    <Router>
-      <App />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <App />
+      </Router>
+    </AuthProvider>
   );
 }
 
