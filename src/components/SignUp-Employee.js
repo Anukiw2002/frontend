@@ -10,7 +10,7 @@ const EmployeeRegistration = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
@@ -20,9 +20,9 @@ const EmployeeRegistration = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
-    setError('');  // Clear error on input change
+    setError(""); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
@@ -30,23 +30,27 @@ const EmployeeRegistration = () => {
     console.log("it works");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/api/employees', {
+      const response = await axios.post("http://localhost:3001/api/employees", {
         username: formData.username.trim(),
-        password: formData.password.trim()
+        password: formData.password.trim(),
       });
 
       console.log("Registration successful:", response.data);
-      navigate('/loginemployee');
+      navigate("/loginemployee");
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setError(error.response.data.message);
       } else {
-        setError('Failed to create employee');
+        setError("Failed to create employee");
       }
       console.error("Error during registration:", error);
     }

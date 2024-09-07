@@ -1,38 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import bg from "../pictures/bgImage.png";
 import logo from "../pictures/Logo.png";
 import "../css/SignUp.css";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "./AuthContext"; // Import the AuthContext
 
 function LogInManager() {
   // State to store input values
-  const [username, setUsername] = useState('');  // Use 'username' instead of 'employeeID'
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Get the loginAsManager function from AuthContext
+  const { loginAsManager } = useContext(AuthContext);
 
   // Function to handle login
   const handleLogin = async (e) => {
-    e.preventDefault();  // Prevent form submission
+    e.preventDefault(); // Prevent form submission
     try {
-      console.log('Logging in...');
-      const { data } = await axios.post('http://localhost:3001/api/employees/verify', {
-        username,  // Send username instead of employeeID
-        password
-      });
-      localStorage.setItem('jwtToken', data.token);
+      console.log("Logging in...");
+      const { data } = await axios.post(
+        "http://localhost:3001/api/employees/verify",
+        {
+          username,
+          password,
+        }
+      );
+
+      // Save JWT token in local storage
+      localStorage.setItem("jwtToken", data.token);
+
+      // Set user role as "manager" using AuthContext
+      loginAsManager();
+
       // Redirect to show-products page or any other page
       window.location.href = "/show-products";
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       console.log(error.response.data); // Log the error response data
-      alert('Login failed. Please check your credentials.');
+      alert("Login failed. Please check your credentials.");
     }
   };
 
   useEffect(() => {
     // Set default headers for axios
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwtToken')}`;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("jwtToken")}`;
   }, []);
 
   return (

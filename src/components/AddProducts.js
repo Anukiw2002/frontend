@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-//import MenuItem from "@mui/material/MenuItem";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import "../css/InputField.css";
@@ -9,10 +8,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
+  // State variables
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [categoryName, setCategoryName] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [categoryID, setCategoryID] = useState("");
 
   const navigate = useNavigate(); // Initialize useNavigate
@@ -38,7 +37,6 @@ function AddProduct() {
             productID,
             productName,
             categoryID,
-            quantity,
           }
         );
 
@@ -52,8 +50,8 @@ function AddProduct() {
         setProductName("");
         setCategoryID("");
         setCategoryName("");
-        setQuantity("");
 
+        // Navigate to product listing page
         navigate("/show-products");
       }
     } catch (err) {
@@ -122,16 +120,6 @@ function AddProduct() {
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
               fullWidth
-            ></TextField>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <TextField
-              id="filled-selling-price"
-              label="Quantity"
-              variant="filled"
-              fullWidth
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
             />
           </Box>
           <Box className="cta-container">
