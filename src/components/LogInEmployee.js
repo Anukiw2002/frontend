@@ -34,7 +34,7 @@ function LogInEmployee() {
       loginAsEmployee();
 
       // Redirect to show-products page or any other page
-      window.location.href = "/show-products";
+      window.location.href = "/show-employee-inventory";
     } catch (error) {
       console.error("Login error:", error);
       console.log(error.response.data); // Log the error response data

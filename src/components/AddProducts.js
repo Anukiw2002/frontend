@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
@@ -6,54 +6,72 @@ import "../css/InputField.css";
 import "../css/CtaButton.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import MenuItem from "@mui/material/MenuItem";
 
 function AddProduct() {
   // State variables
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
-  const [categoryName, setCategoryName] = useState("");
   const [categoryID, setCategoryID] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate(); // Initialize useNavigate
+
+  // Fetch categories from the server when the component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/categories");
+        setCategories(response.data); // Assuming the data is an array of categories
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Handle category selection
+  const handleCategoryChange = (event) => {
+    const selectedCategoryID = event.target.value;
+    setCategoryID(selectedCategoryID);
+
+    // Find the corresponding category name
+    const selectedCategory = categories.find(
+      (category) => category.categoryID === selectedCategoryID
+    );
+    if (selectedCategory) {
+      setCategoryName(selectedCategory.categoryName);
+    }
+  };
 
   const handleSubmit = async (event) => {
     if (event) event.preventDefault();
 
     try {
-      // Check if the category exists or create it if not
-      const categoryResponse = await axios.post(
-        "http://localhost:3001/api/categories/check-or-create",
+      const productResponse = await axios.post(
+        "http://localhost:3001/api/products",
         {
+          productID,
+          productName,
           categoryID,
-          categoryName,
         }
       );
 
-      if (categoryResponse.status === 200 || categoryResponse.status === 201) {
-        // Proceed to add or update the product
-        const productResponse = await axios.post(
-          "http://localhost:3001/api/products",
-          {
-            productID,
-            productName,
-            categoryID,
-          }
-        );
+      console.log(
+        "Product added or updated successfully!",
+        productResponse.data
+      );
 
-        console.log(
-          "Product added or updated successfully!",
-          productResponse.data
-        );
+      // Clear the form
+      setProductID("");
+      setProductName("");
+      setCategoryID("");
+      setCategoryName("");
 
-        // Clear the form
-        setProductID("");
-        setProductName("");
-        setCategoryID("");
-        setCategoryName("");
-
-        // Navigate to product listing page
-        navigate("/show-products");
-      }
+      // Navigate to product listing page
+      navigate("/show-products");
     } catch (err) {
       console.error(
         "Error submitting form:",
@@ -85,12 +103,19 @@ function AddProduct() {
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-category-id"
-              label="Enter Category ID"
+              select
+              label="Select Category ID"
               variant="filled"
               fullWidth
               value={categoryID}
-              onChange={(e) => setCategoryID(e.target.value)}
-            />
+              onChange={handleCategoryChange}
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.categoryID} value={category.categoryID}>
+                  {category.categoryID}
+                </MenuItem>
+              ))}
+            </TextField>
           </Box>
           <Box sx={{ mb: 3 }}>
             <TextField
@@ -115,11 +140,11 @@ function AddProduct() {
           <Box sx={{ mb: 3 }}>
             <TextField
               id="filled-product-category"
-              label="Select Product Category"
+              label="Product Category"
               variant="filled"
               value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
               fullWidth
+              disabled
             />
           </Box>
           <Box className="cta-container">
