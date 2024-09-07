@@ -34,7 +34,7 @@ const NavBar = () => {
 
   const settingsItems = [
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
-    { text: "Log out", icon: <LogoutIcon />, path: "/logout" },
+    { text: "Log out", icon: <LogoutIcon />, path: "/" },
   ];
 
   return (

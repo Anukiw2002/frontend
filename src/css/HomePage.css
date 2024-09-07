@@ -1,7 +1,25 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .container {
   position: relative;
-  width: 98vw;
-  height: 97vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -18,17 +36,15 @@
 .logo {
   width: 450px;
   height: 160px;
-  align-self: center;
-  margin-top: 80px;
+  margin-top: 0;
+  z-index: 1;
 }
 
 .buttonContainer {
-  width: 100%;
-  height: 100%;
-  justify-content: flex-start;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 178px;
-  display: inline-flex;
-  margin-left: 80px;
-  margin-bottom: 160px;
+  gap: 20px;
+  z-index: 1;
+  padding: 20px;
 }
