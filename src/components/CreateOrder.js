@@ -17,6 +17,8 @@ function CreateOrder() {
     items: [{ productName: "", quantity: "", price: "" }],
   });
 
+  const [customerExists, setCustomerExists] = useState(null); // State to track customer existence
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setOrder({ ...order, [name]: value });
@@ -41,11 +43,38 @@ function CreateOrder() {
     setOrder({ ...order, items: newItems });
   };
 
+  const handleCustomerIDBlur = async () => {
+    if (!order.customerID.trim()) {
+      setCustomerExists(null);
+      return;
+    }
+
+    try {
+      const customerResponse = await axios.get(
+        `http://localhost:3001/api/customers/by-customID/${order.customerID}`
+      );
+
+      if (customerResponse.data && customerResponse.data._id) {
+        setCustomerExists(true); // Customer exists
+      } else {
+        setCustomerExists(false); // Customer does not exist
+      }
+    } catch (error) {
+      console.error("Error checking customer existence:", error.message);
+      setCustomerExists(false); // In case of an error, assume customer doesn't exist
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!order.customerID.trim()) {
       alert("Please enter a valid Customer ID");
+      return;
+    }
+
+    if (!customerExists) {
+      alert("Customer does not exist. Please add the customer first.");
       return;
     }
 
@@ -58,24 +87,20 @@ function CreateOrder() {
         `http://localhost:3001/api/customers/by-customID/${order.customerID}`
       );
 
-      if (!customerResponse.data || !customerResponse.data._id) {
-        throw new Error("Customer not found");
-      }
-
       const customerObjectID = customerResponse.data._id;
 
-      // Format the order data using the ObjectID for the customer_ID field
       const formattedOrder = {
         orderID: order.orderID,
         orderDate: order.orderDate,
         totalPrice: calculatedTotalPrice,
-        customer_ID: customerObjectID, // This should match your Order model field name
+        customer_ID: customerObjectID,
         orderDetails: order.items.map((item) => ({
           productName: item.productName,
           quantity: parseInt(item.quantity),
           price: parseFloat(item.price),
         })),
       };
+
       const response = await axios.post(
         "http://localhost:3001/api/orders",
         formattedOrder
@@ -140,6 +165,13 @@ function CreateOrder() {
               name="customerID"
               value={order.customerID}
               onChange={handleChange}
+              onBlur={handleCustomerIDBlur} // Check customer existence on blur
+              error={customerExists === false} // Show error if customer doesn't exist
+              helperText={
+                customerExists === false
+                  ? "Customer does not exist. Please add the customer first."
+                  : ""
+              }
               required
             />
 
