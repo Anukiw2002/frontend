@@ -22,11 +22,9 @@ function ShowInventory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products
     axios
       .get("http://localhost:3001/api/products")
       .then((response) => {
-        // console.log("Fetched Products:", response.data); // Log products
         setProducts(response.data);
       })
       .catch((error) => {
@@ -37,7 +35,6 @@ function ShowInventory() {
     axios
       .get("http://localhost:3001/api/categories")
       .then((response) => {
-        // console.log("Fetched Categories:", response.data); // Log categories
         setCategories(response.data);
       })
       .catch((error) => {
@@ -49,7 +46,6 @@ function ShowInventory() {
     navigate("/add-product");
   };
 
-  // Group products by categoryID and include categoryName
   const groupedProducts = products.reduce((acc, product) => {
     const { categoryID } = product;
     const category = categories.find(
@@ -66,7 +62,6 @@ function ShowInventory() {
     acc[categoryID].products.push(product);
     return acc;
   }, {});
-  // console.log(groupedProducts);
 
   const handleEdit = (id) => {
     navigate(`/update-product/${id}`);
@@ -77,7 +72,7 @@ function ShowInventory() {
       .delete(`http://localhost:3001/api/products/${id}`)
       .then((res) => {
         console.log(res);
-        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted customer from state
+        setProducts(products.filter((product) => product._id !== id)); 
       })
       .catch((err) => console.log(err));
   };

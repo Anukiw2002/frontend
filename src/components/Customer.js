@@ -39,7 +39,7 @@ function Customer() {
       .delete(`http://localhost:3001/api/customers/${id}`)
       .then((res) => {
         console.log(res);
-        setCustomers(customers.filter((customer) => customer._id !== id)); // Remove the deleted customer from state
+        setCustomers(customers.filter((customer) => customer._id !== id)); 
       })
       .catch((err) => console.log(err));
   };

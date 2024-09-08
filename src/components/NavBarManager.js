@@ -19,12 +19,12 @@ import { AuthContext } from "./AuthContext";
 const drawerWidth = 240;
 
 const NavBarManager = () => {
-  const { logout } = useContext(AuthContext); // Access logout function from AuthContext
-  const navigate = useNavigate(); // Use navigate for redirection after logout
+  const { logout } = useContext(AuthContext); 
+  const navigate = useNavigate(); 
 
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthContext
-    navigate("/"); // Redirect to homepage after logout
+    logout(); 
+    navigate("/"); 
   };
 
   const drawerItems = [
@@ -87,7 +87,7 @@ const NavBarManager = () => {
         <List>
           <ListItem disablePadding>
             <ListItemButton
-              onClick={handleLogout} // Trigger the handleLogout on click
+              onClick={handleLogout} 
               sx={{ my: 1, mx: 2 }}
             >
               <ListItemIcon>

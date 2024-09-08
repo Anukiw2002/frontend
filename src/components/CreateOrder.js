@@ -9,7 +9,6 @@ function CreateOrder() {
   const drawerWidth = 280;
   const navigate = useNavigate();
 
-  // Function to get the current date in YYYY-MM-DD format
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -18,7 +17,6 @@ function CreateOrder() {
     return `${year}-${month}-${day}`;
   };
 
-  // Initialize order state with the current date
   const [order, setOrder] = useState({
     orderDate: getCurrentDate(),
     totalPrice: "",
@@ -85,9 +83,9 @@ function CreateOrder() {
       );
 
       if (customerResponse.data && customerResponse.data._id) {
-        setCustomerExists(true); // Customer exists
+        setCustomerExists(true); 
       } else {
-        setCustomerExists(false); // Customer does not exist
+        setCustomerExists(false); 
       }
     } catch (error) {
       console.error("Error checking customer existence:", error.message);

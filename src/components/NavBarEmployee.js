@@ -16,17 +16,15 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import techSLlogo from "../pictures/Logo.png";
-import { AuthContext } from "./AuthContext"; // Import AuthContext to use logout
-
+import { AuthContext } from "./AuthContext"; 
 const drawerWidth = 240;
 
 const NavBarEmployee = () => {
-  const { logout } = useContext(AuthContext); // Access logout function from AuthContext
-  const navigate = useNavigate(); // Use navigate for redirection after logout
-
+  const { logout } = useContext(AuthContext); 
+  const navigate = useNavigate(); 
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthContext
-    navigate("/"); // Redirect to homepage after logout
+    logout(); 
+    navigate("/"); 
   };
 
   const drawerItems = [
@@ -47,7 +45,7 @@ const NavBarEmployee = () => {
   ];
 
   const settingsItems = [
-    { text: "Log out", icon: <LogoutIcon />, action: handleLogout }, // Assign logout action
+    { text: "Log out", icon: <LogoutIcon />, action: handleLogout }, 
   ];
 
   return (
@@ -96,7 +94,7 @@ const NavBarEmployee = () => {
           {settingsItems.map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton
-                onClick={item.action} // Attach the logout action to Log out button
+                onClick={item.action} 
                 sx={{ my: 1, mx: 2 }}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>

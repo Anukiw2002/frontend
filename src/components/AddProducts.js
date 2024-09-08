@@ -8,19 +8,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
-  // State variables
   const [productID, setProductID] = useState("");
   const [productName, setProductName] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryID, setCategoryID] = useState("");
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
     if (event) event.preventDefault();
 
     try {
-      // Check if the category exists or create it if not
       const categoryResponse = await axios.post(
         "http://localhost:3001/api/categories/check-or-create",
         {
@@ -30,7 +28,6 @@ function AddProduct() {
       );
 
       if (categoryResponse.status === 200 || categoryResponse.status === 201) {
-        // Proceed to add or update the product
         const productResponse = await axios.post(
           "http://localhost:3001/api/products",
           {
@@ -45,13 +42,11 @@ function AddProduct() {
           productResponse.data
         );
 
-        // Clear the form
         setProductID("");
         setProductName("");
         setCategoryID("");
         setCategoryName("");
 
-        // Navigate to product listing page
         navigate("/show-products");
       }
     } catch (err) {

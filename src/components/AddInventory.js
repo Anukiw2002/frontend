@@ -8,10 +8,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function AddInventory() {
-  // State for each field
   const [productID, setProductID] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
-  const [quantity, setQuantity] = useState(""); // Added separate state for quantity
+  const [quantity, setQuantity] = useState(""); 
   const [date, setDate] = useState("");
 
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ function AddInventory() {
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
 
-    // Convert date to ISO 8601 format
     const isoDate = new Date(date).toISOString();
 
     axios
@@ -27,14 +25,13 @@ function AddInventory() {
         productID,
         date: isoDate,
         sellingPrice,
-        quantity, // Add quantity to request
+        quantity, 
       })
       .then(() => {
-        // Clear the form
         setProductID("");
         setDate("");
         setSellingPrice("");
-        setQuantity(""); // Clear quantity
+        setQuantity(""); 
 
         navigate("/show-employee-inventory");
       })
@@ -93,8 +90,8 @@ function AddInventory() {
               label="Quantity"
               variant="filled"
               fullWidth
-              value={quantity} // Bound to the quantity state
-              onChange={(e) => setQuantity(e.target.value)} // Updates quantity state
+              value={quantity} 
+              onChange={(e) => setQuantity(e.target.value)} 
             />
           </Box>
           <Box sx={{ mb: 2 }}>

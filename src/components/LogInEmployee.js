@@ -5,18 +5,16 @@ import "../css/SignUp.css";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "./AuthContext"; // Import the AuthContext
+import { AuthContext } from "./AuthContext"; 
 
 function LogInEmployee() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Get the loginAsEmployee function from AuthContext
   const { loginAsEmployee } = useContext(AuthContext);
 
-  // Function to handle login
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
     try {
       console.log("Logging in...");
       const { data } = await axios.post(
@@ -27,23 +25,19 @@ function LogInEmployee() {
         }
       );
 
-      // Save JWT token in local storage
       localStorage.setItem("jwtToken", data.token);
 
-      // Set user role as "employee" using AuthContext
       loginAsEmployee();
 
-      // Redirect to show-products page or any other page
       window.location.href = "/show-employee-inventory";
     } catch (error) {
       console.error("Login error:", error);
-      console.log(error.response.data); // Log the error response data
+      console.log(error.response.data); 
       alert("Login failed. Please check your credentials.");
     }
   };
 
   useEffect(() => {
-    // Set default headers for axios
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${localStorage.getItem("jwtToken")}`;

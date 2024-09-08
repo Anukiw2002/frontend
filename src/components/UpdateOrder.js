@@ -24,7 +24,6 @@ function UpdateOrder() {
       .get(`http://localhost:3001/api/orders/${id}`)
       .then((res) => {
         const orderData = res.data;
-        // Fetch customer data
         return axios
           .get(`http://localhost:3001/api/customers/${orderData.customer_ID}`)
           .then((customerRes) => {
@@ -34,7 +33,7 @@ function UpdateOrder() {
               orderDate: new Date(orderData.orderDate)
                 .toISOString()
                 .split("T")[0],
-              customerCustomID: customerData.customer_ID, // Set the custom customer ID
+              customerCustomID: customerData.customer_ID, 
             });
           });
       })
@@ -80,7 +79,6 @@ function UpdateOrder() {
     const updatedOrder = {
       ...order,
       totalPrice: calculatedTotalPrice,
-      // Don't include customerCustomID in the update
       customerCustomID: undefined,
     };
 
@@ -160,7 +158,7 @@ function UpdateOrder() {
               value={order.customerCustomID}
               onChange={handleChange}
               required
-              disabled // Make this field read-only
+              disabled 
             />
 
             <div>

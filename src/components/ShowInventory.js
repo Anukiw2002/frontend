@@ -21,7 +21,6 @@ function ShowEmployeeInventory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products
     axios
       .get("http://localhost:3001/api/products")
       .then((response) => {
@@ -45,16 +44,16 @@ function ShowEmployeeInventory() {
       .delete(`http://localhost:3001/api/products/${id}`)
       .then((res) => {
         console.log(res);
-        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted product from state
+        setProducts(products.filter((product) => product._id !== id)); 
       })
       .catch((err) => console.log(err));
   };
 
   const formatDate = (isoDate) => {
     if (!isoDate) {
-      return ""; // Return an empty string or a default value if isoDate is undefined
+      return ""; 
     }
-    return isoDate.split("T")[0]; // Extracts the date in YYYY-MM-DD format
+    return isoDate.split("T")[0]; 
   };
 
   return (

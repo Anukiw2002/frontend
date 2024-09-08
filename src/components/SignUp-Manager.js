@@ -22,7 +22,7 @@ const ManagerRegistration = () => {
       ...formData,
       [name]: value,
     });
-    setError(""); // Clear error on input change
+    setError("");
   };
 
   const handleSubmit = async (e) => {
