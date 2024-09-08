@@ -7,7 +7,6 @@ import axios from "axios";
 function AddCustomer() {
   const drawerWidth = 280;
 
-  const [customer_ID, setCustomerID] = useState("");
   const [fName, setfName] = useState("");
   const [lName, setlName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,7 +18,6 @@ function AddCustomer() {
 
     axios
       .post("http://localhost:3001/api/customers", {
-        customer_ID,
         fName,
         lName,
         email,
@@ -28,8 +26,7 @@ function AddCustomer() {
       })
       .then((result) => {
         console.log(result);
-        
-        setCustomerID("");
+        // Clear the form
         setfName("");
         setlName("");
         setEmail("");
@@ -63,16 +60,6 @@ function AddCustomer() {
           }}
         >
           <h2>Add New Customer</h2>
-          <Box sx={{ mb: 4 }}>
-            <TextField
-              id="customerID"
-              label="Customer ID"
-              variant="filled"
-              fullWidth
-              value={customer_ID}
-              onChange={(e) => setCustomerID(e.target.value)}
-            />
-          </Box>
           <Box sx={{ mb: 4 }}>
             <TextField
               id="fName"
