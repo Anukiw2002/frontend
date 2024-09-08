@@ -75,6 +75,8 @@ function OrderHistory() {
                   <TableCell>Order ID</TableCell>
                   <TableCell>Total Price</TableCell>
                   <TableCell>Actions</TableCell>
+                  <TableCell>More info</TableCell>
+
                 </TableRow>
               </TableHead>
               <TableBody>
