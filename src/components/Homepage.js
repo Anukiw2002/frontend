@@ -6,7 +6,7 @@ import "../css/HomePage.css";
 
 function Homepage() {
   return (
-    <div className="container">
+    <div className="homepage-container">
       <img src={bg} alt="BackgroundImage" className="bgImage" />
       <img src={logo} alt="logo" className="logo" />
       <div className="buttonContainer">
