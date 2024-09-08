@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import "../css/InputField.css";
-import "../css/CtaButton.css";
 import {
   Table,
   TableBody,
@@ -15,46 +13,39 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 function Customer() {
   const drawerWidth = 280;
-
   const navigate = useNavigate();
+  const [customers, setCustomers] = useState([]);
 
   const handleAddButtonClick = () => {
     navigate("/add-customers");
   };
 
-  const [customers, setCustomers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      contactNumber: "1234567890",
-      email: "john@example.com",
-      address: "123 Main St",
-      city: "New York",
-      country: "USA",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      contactNumber: "0987654321",
-      email: "jane@example.com",
-      address: "456 Elm St",
-      city: "Los Angeles",
-      country: "USA",
-    },
-    // Add more customer data as needed
-  ]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/customers")
+      .then((customer) => {
+        console.log(customer);
+        setCustomers(customer.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleEdit = (id) => {
-    // Implement edit functionality
-    console.log(`Edit customer with id: ${id}`);
+    navigate(`/update-customer/${id}`);
   };
 
   const handleDelete = (id) => {
-    // Implement delete functionality
-    console.log(`Delete customer with id: ${id}`);
+    axios
+      .delete(`http://localhost:3001/api/customers/${id}`)
+      .then((res) => {
+        console.log(res);
+        setCustomers(customers.filter((customer) => customer._id !== id)); // Remove the deleted customer from state
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -65,8 +56,8 @@ function Customer() {
           sx={{
             flexGrow: 1,
             p: 10,
-            mt: 17,
-            mb: 18,
+            mt: 5,
+            mb: 5,
             mr: 3,
             ml: `${drawerWidth}px`,
             width: `calc(100% - ${drawerWidth}px)`,
@@ -89,17 +80,19 @@ function Customer() {
               </TableHead>
               <TableBody>
                 {customers.map((customer) => (
-                  <TableRow key={customer.id}>
-                    <TableCell>{customer.name}</TableCell>
-                    <TableCell>{customer.id}</TableCell>
-                    <TableCell>{customer.contactNumber}</TableCell>
+                  <TableRow key={customer._id}>
+                    <TableCell>
+                      {customer.fName + " " + customer.lName}
+                    </TableCell>
+                    <TableCell>{customer.customer_ID}</TableCell>
+                    <TableCell>{customer.contact_number}</TableCell>
                     <TableCell>{customer.email}</TableCell>
                     <TableCell>{customer.address}</TableCell>
                     <TableCell>
-                      <Button onClick={() => handleEdit(customer.id)}>
+                      <Button onClick={() => handleEdit(customer._id)}>
                         <EditIcon />
                       </Button>
-                      <Button onClick={() => handleDelete(customer.id)}>
+                      <Button onClick={() => handleDelete(customer._id)}>
                         <DeleteIcon />
                       </Button>
                     </TableCell>

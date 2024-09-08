@@ -1,10 +1,12 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-function CtaButton(prop) {
+function CtaButton({ ctaName, onClick }) {
   return (
     <div>
-      <Button variant="contained">{prop.ctaName}</Button>
+      <Button variant="contained" onClick={onClick}>
+        {ctaName}
+      </Button>
     </div>
   );
 }

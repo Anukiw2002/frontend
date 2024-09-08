@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import {
   Table,
@@ -8,33 +8,45 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function OrderHistory() {
   const drawerWidth = 280;
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
 
-  const handleRowClick = (id) => {
-    navigate(`/orderhistory/${id}`);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/orders")
+      .then((response) => {
+        console.log("API response:", response.data);
+        setOrders(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleSeeMore = (id) => {
+    navigate(`/orderdetails/${id}`);
   };
 
-  const orders = [
-    {
-      id: 1,
-      name: "Lewis Hamilton",
-      quantity: "150",
-      date: "2024-08-01",
-      price: "$2000",
-    },
-    {
-      id: 2,
-      name: "George Russell",
-      quantity: "119",
-      date: "2024-08-02",
-      price: "$1800",
-    },
-  ];
+  const handleEdit = (id) => {
+    navigate(`/update-order/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:3001/api/orders/${id}`)
+      .then((res) => {
+        console.log(res);
+        setOrders(orders.filter((order) => order._id !== id));
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -59,25 +71,44 @@ function OrderHistory() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Customer Name</TableCell>
-                  <TableCell>Order ID</TableCell>
-                  <TableCell>Order Quantity</TableCell>
                   <TableCell>Order Date</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Order ID</TableCell>
+                  <TableCell>Total Price</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow
-                    key={order.id}
-                    onClick={() => handleRowClick(order.id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.quantity}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>{order.price}</TableCell>
+                  <TableRow key={order._id}>
+                    <TableCell>
+                      {order.orderDate
+                        ? new Date(order.orderDate).toLocaleDateString()
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell>{order.orderID || "N/A"}</TableCell>
+                    <TableCell>
+                      {order.totalPrice != null
+                        ? `Rs. ${order.totalPrice.toFixed(2)}`
+                        : "N/A"}
+                    </TableCell>
+
+                    <TableCell>
+                      <Button onClick={() => handleEdit(order._id)}>
+                        <EditIcon />
+                      </Button>
+                      <Button onClick={() => handleDelete(order._id)}>
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        onClick={() => handleSeeMore(order._id)}
+                      >
+                        See More
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import CtaButton from "../components/CtaButton";
 import Box from "@mui/material/Box";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
-function AddCustomer() {
+function UpdateCustomer() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const drawerWidth = 280;
 
   const [customer_ID, setCustomerID] = useState("");
@@ -14,11 +17,28 @@ function AddCustomer() {
   const [address, setAddress] = useState("");
   const [contact_number, setContactNumber] = useState("");
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/customers/${id}`)
+      .then((res) => {
+        const customer = res.data;
+        setCustomerID(customer.customer_ID || "");
+        setfName(customer.fName || "");
+        setlName(customer.lName || "");
+        setEmail(customer.email || "");
+        setAddress(customer.address || "");
+        setContactNumber(customer.contact_number || "");
+      })
+      .catch((err) => {
+        console.error("Error fetching customer data:", err);
+      });
+  }, [id]);
+
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
 
     axios
-      .post("http://localhost:3001/api/customers", {
+      .put(`http://localhost:3001/api/customers/${id}`, {
         customer_ID,
         fName,
         lName,
@@ -28,18 +48,11 @@ function AddCustomer() {
       })
       .then((result) => {
         console.log(result);
-        // Clear the form
-        setCustomerID("");
-        setfName("");
-        setlName("");
-        setEmail("");
-        setAddress("");
-        setContactNumber("");
-        
+        navigate("/customers");
       })
       .catch((err) =>
         console.error(
-          "Error submitting form:",
+          "Error updating customer:",
           err.response ? err.response.data : err.message
         )
       );
@@ -62,15 +75,15 @@ function AddCustomer() {
             borderRadius: "24px",
           }}
         >
-          <h2>Add New Customer</h2>
+          <h2>Update Customer</h2>
           <Box sx={{ mb: 4 }}>
             <TextField
-              id="customerID"
+              id="customer_ID"
               label="Customer ID"
               variant="filled"
               fullWidth
               value={customer_ID}
-              onChange={(e) => setCustomerID(e.target.value)}
+              disabled // Make this field read-only
             />
           </Box>
           <Box sx={{ mb: 4 }}>
@@ -95,7 +108,7 @@ function AddCustomer() {
           </Box>
           <Box sx={{ mb: 4 }}>
             <TextField
-              id="contactNumber"
+              id="contact_number"
               label="Contact Number"
               variant="filled"
               fullWidth
@@ -124,7 +137,7 @@ function AddCustomer() {
             />
           </Box>
           <Box className="cta-container">
-            <CtaButton onClick={handleSubmit} ctaName="Add" />
+            <CtaButton onClick={handleSubmit} ctaName="Update" />
           </Box>
         </Box>
       </Box>
@@ -132,4 +145,4 @@ function AddCustomer() {
   );
 }
 
-export default AddCustomer;
+export default UpdateCustomer;

@@ -1,52 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-function OrderHistory() {
-  const drawerWidth = 280;
+function OrderDetails() {
+  const { id } = useParams();
+  const [orderData, setOrderData] = useState(null);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/orders/${id}/details`)
+      .then((response) => {
+        console.log("API response:", response.data); // Log the response data
+        const order = response.data;
 
-  const [order] = useState([
-    {
-      id: 1,
-      date: "2024-08-01",
-      items: [
-        { name: "iPhone", quantity: "1", price: "$2000" },
-        { name: "MacBook", quantity: "1", price: "$1300" },
-      ],
-    },
-    {
-      id: 2,
-      date: "2024-08-02",
-      items: [
-        { name: "Samsung Galaxy", quantity: "2", price: "$1500" },
-        { name: "Dell Laptop", quantity: "1", price: "$1000" },
-      ],
-    },
-  ]);
+        // Calculate the subtotal
+        const subtotal = order.orderDetails.reduce((acc, item) => {
+          return acc + item.price * item.quantity;
+        }, 0);
 
-  const handleEdit = (orderId) => {
-    // Implement edit functionality
-    console.log(`Edit order with id: ${orderId}`);
-  };
-
-  const handleDelete = (orderId) => {
-    // Implement delete functionality
-    console.log(`Delete order with id: ${orderId}`);
-  };
+        // Update the order's totalprice with the calculated subtotal
+        if (subtotal !== order.totalprice) {
+          axios
+            .put(`http://localhost:3001/api/orders/${id}`, {
+              totalprice: subtotal,
+            })
+            .then((updateResponse) => {
+              // Set the updated order data with the correct subtotal
+              setOrderData({ ...order, totalprice: subtotal });
+            })
+            .catch((error) =>
+              console.error("Error updating order subtotal:", error)
+            );
+        } else {
+          setOrderData(order);
+        }
+      })
+      .catch((error) => console.error("Error fetching order details:", error));
+  }, [id]);
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -66,34 +66,68 @@ function OrderHistory() {
           }}
         >
           <h1>Order Details</h1>
-          {order ? (
-            <Box key={order.id}>
-              <h3>Order Date - {order.date}</h3>
-              <h3>Customer ID - {order.id}</h3>
+          {orderData ? (
+            <Box>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h3>
+                    Order Date:{" "}
+                    {new Date(orderData.orderDate).toLocaleDateString()}
+                  </h3>
+                  <h3>
+                    Customer ID: {orderData.customer_ID?.customer_ID || "N/A"}
+                  </h3>
+                </div>
+                <div>
+                  <h3>Order ID: {orderData.orderID}</h3>
+                  <h3>
+                    Customer Name:{" "}
+                    {`${orderData.customer_ID?.fName || "N/A"} ${
+                      orderData.customer_ID?.lName || ""
+                    }`}
+                  </h3>
+                </div>
+              </div>
               <TableContainer component={Paper}>
                 <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Product Name</TableCell>
+                      <TableCell>Price</TableCell>
+                      <TableCell>Quantity</TableCell>
+                      <TableCell>Total</TableCell>
+                    </TableRow>
+                  </TableHead>
                   <TableBody>
-                    {order.items.map((item, index) => (
+                    {orderData.orderDetails.map((item, index) => (
                       <TableRow key={index}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.price}</TableCell>
+                        <TableCell>{item.productName}</TableCell>
+                        <TableCell>Rs. {item.price.toFixed(2)}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
-                          <Button onClick={() => handleEdit(order.id)}>
-                            <EditIcon />
-                          </Button>
-                          <Button onClick={() => handleDelete(order.id)}>
-                            <DeleteIcon />
-                          </Button>
+                          Rs. {(item.price * item.quantity).toFixed(2)}
                         </TableCell>
                       </TableRow>
                     ))}
+                    <TableRow>
+                      <TableCell colSpan={3} align="right">
+                        <strong>Sub Total</strong>
+                      </TableCell>
+                      <TableCell>
+                        <strong>
+                          Rs.{" "}
+                          {orderData.totalprice
+                            ? orderData.totalprice.toFixed(2)
+                            : "N/A"}
+                        </strong>
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
             </Box>
           ) : (
-            <p>Order not found.</p>
+            <p>Loading order details...</p>
           )}
         </Box>
       </Box>
