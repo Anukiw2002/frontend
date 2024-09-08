@@ -28,7 +28,7 @@ function AddCustomer() {
       })
       .then((result) => {
         console.log(result);
-        // Clear the form
+        
         setCustomerID("");
         setfName("");
         setlName("");
