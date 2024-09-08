@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import "../css/InputField.css";
 import "../css/CtaButton.css";
 
+// test comment
+
 function AddCustomer() {
   const drawerWidth = 280;
 
