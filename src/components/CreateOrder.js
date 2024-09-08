@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -168,8 +168,15 @@ function CreateOrder() {
               helperText={
                 customerExists === false
                   ? "Customer does not exist. Please add the customer first."
+                  : customerExists === true
+                  ? "Customer exists."
                   : ""
               }
+              InputProps={{
+                style: {
+                  color: customerExists === true ? "green" : "inherit",
+                },
+              }}
               required
             />
 
