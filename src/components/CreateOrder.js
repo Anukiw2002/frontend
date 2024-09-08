@@ -33,11 +33,32 @@ function CreateOrder() {
     setOrder({ ...order, [name]: value });
   };
 
-  const handleItemChange = (index, event) => {
+  const handleItemChange = async (index, event) => {
     const { name, value } = event.target;
     const newItems = [...order.items];
     newItems[index] = { ...newItems[index], [name]: value };
+
     setOrder({ ...order, items: newItems });
+
+    if (name === "productName" || name === "quantity") {
+      try {
+        const productName = newItems[index].productName;
+        const quantity = newItems[index].quantity;
+
+        if (productName && quantity) {
+          const productResponse = await axios.get(
+            `http://localhost:3001/api/products/check/${productName}/${quantity}`
+          );
+          newItems[index].price = productResponse.data.price;
+          setOrder({ ...order, items: newItems });
+        }
+      } catch (error) {
+        console.error("Product not found or insufficient quantity", error);
+        alert(
+          error.response?.data.message || "Error checking product availability"
+        );
+      }
+    }
   };
 
   const handleAddItem = () => {
@@ -212,9 +233,7 @@ function CreateOrder() {
                     margin="normal"
                     name="price"
                     value={item.price}
-                    onChange={(e) => handleItemChange(index, e)}
-                    InputProps={{ startAdornment: "Rs." }}
-                    required
+                    InputProps={{ readOnly: true }}
                   />
                   <Button
                     onClick={() => handleRemoveItem(index)}
@@ -226,6 +245,7 @@ function CreateOrder() {
                   </Button>
                 </Box>
               ))}
+
               <Button
                 onClick={handleAddItem}
                 variant="contained"

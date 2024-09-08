@@ -20,10 +20,6 @@ function Customer() {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
 
-  const handleAddButtonClick = () => {
-    navigate("/add-customers");
-  };
-
   useEffect(() => {
     axios
       .get("http://localhost:3001/api/customers")
@@ -102,17 +98,6 @@ function Customer() {
             </Table>
           </TableContainer>
         </Box>
-        <Button
-          onClick={handleAddButtonClick}
-          variant="contained"
-          sx={{
-            position: "absolute",
-            bottom: "20px",
-            right: "20px",
-          }}
-        >
-          Add Customer
-        </Button>
       </Box>
     </Box>
   );
