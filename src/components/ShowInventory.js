@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 function ShowEmployeeInventory() {
   const drawerWidth = 280;
   const [products, setProducts] = useState([]);
-//   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +25,6 @@ function ShowEmployeeInventory() {
     axios
       .get("http://localhost:3001/api/products")
       .then((response) => {
-        // console.log("Fetched Products:", response.data); // Log products
         setProducts(response.data);
       })
       .catch((error) => {
@@ -47,17 +45,17 @@ function ShowEmployeeInventory() {
       .delete(`http://localhost:3001/api/products/${id}`)
       .then((res) => {
         console.log(res);
-        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted customer from state
+        setProducts(products.filter((product) => product._id !== id)); // Remove the deleted product from state
       })
       .catch((err) => console.log(err));
   };
 
-const formatDate = (isoDate) => {
-  if (!isoDate) {
-    return ""; // Return an empty string or a default value if isoDate is undefined
-  }
-  return isoDate.split('T')[0]; // Extracts the date in YYYY-MM-DD format
-};
+  const formatDate = (isoDate) => {
+    if (!isoDate) {
+      return ""; // Return an empty string or a default value if isoDate is undefined
+    }
+    return isoDate.split("T")[0]; // Extracts the date in YYYY-MM-DD format
+  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
@@ -85,30 +83,31 @@ const formatDate = (isoDate) => {
                   <TableCell>Product</TableCell>
                   <TableCell>Category ID</TableCell>
                   <TableCell>Date</TableCell>
-                  <TableCell>Quantitiy</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Quantity</TableCell>
+                  <TableCell>Price (Rs.)</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {products.map((product) => (
-                    <TableRow>
-                        <TableCell>{product.productID}</TableCell>
-                        <TableCell>{product.productName}</TableCell>
-                        <TableCell>{product.categoryID}</TableCell>
-                        <TableCell>{formatDate(product.date)}</TableCell>
-                        <TableCell>{product.quantity}</TableCell>
-                        <TableCell>{product.sellingPrice}</TableCell>
-                      <TableCell>
-                        <Button onClick={() => handleEdit(product._id)}>
-                          <EditIcon />
-                        </Button>
-                        <Button onClick={() => handleDelete(product._id)}>
-                          <DeleteIcon />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  )
-                )}
+                  <TableRow key={product._id}>
+                    <TableCell>{product.productID}</TableCell>
+                    <TableCell>{product.productName}</TableCell>
+                    <TableCell>{product.categoryID}</TableCell>
+                    <TableCell>{formatDate(product.date)}</TableCell>
+                    <TableCell>{product.quantity}</TableCell>
+                    <TableCell>Rs. {product.sellingPrice}</TableCell>{" "}
+                    {/* Display price in Rs. */}
+                    <TableCell>
+                      <Button onClick={() => handleEdit(product._id)}>
+                        <EditIcon />
+                      </Button>
+                      <Button onClick={() => handleDelete(product._id)}>
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

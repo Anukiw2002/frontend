@@ -9,24 +9,56 @@ function CreateOrder() {
   const drawerWidth = 280;
   const navigate = useNavigate();
 
+  // Function to get the current date in YYYY-MM-DD format
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Initialize order state with the current date
   const [order, setOrder] = useState({
-    orderID: "",
-    orderDate: "",
+    orderDate: getCurrentDate(),
     totalPrice: "",
     customerID: "",
     items: [{ productName: "", quantity: "", price: "" }],
   });
+
+  const [customerExists, setCustomerExists] = useState(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setOrder({ ...order, [name]: value });
   };
 
-  const handleItemChange = (index, event) => {
+  const handleItemChange = async (index, event) => {
     const { name, value } = event.target;
     const newItems = [...order.items];
     newItems[index] = { ...newItems[index], [name]: value };
+
     setOrder({ ...order, items: newItems });
+
+    if (name === "productName" || name === "quantity") {
+      try {
+        const productName = newItems[index].productName;
+        const quantity = newItems[index].quantity;
+
+        if (productName && quantity) {
+          const productResponse = await axios.get(
+            `http://localhost:3001/api/products/check/${productName}/${quantity}`
+          );
+          newItems[index].price = productResponse.data.price;
+          setOrder({ ...order, items: newItems });
+        }
+      } catch (error) {
+        console.error("Product not found or insufficient quantity", error);
+        alert(
+          error.response?.data.message || "Error checking product availability"
+        );
+      }
+    }
   };
 
   const handleAddItem = () => {
@@ -41,11 +73,38 @@ function CreateOrder() {
     setOrder({ ...order, items: newItems });
   };
 
+  const handleCustomerIDBlur = async () => {
+    if (!order.customerID.trim()) {
+      setCustomerExists(null);
+      return;
+    }
+
+    try {
+      const customerResponse = await axios.get(
+        `http://localhost:3001/api/customers/by-customID/${order.customerID}`
+      );
+
+      if (customerResponse.data && customerResponse.data._id) {
+        setCustomerExists(true); // Customer exists
+      } else {
+        setCustomerExists(false); // Customer does not exist
+      }
+    } catch (error) {
+      console.error("Error checking customer existence:", error.message);
+      setCustomerExists(false);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!order.customerID.trim()) {
       alert("Please enter a valid Customer ID");
+      return;
+    }
+
+    if (!customerExists) {
+      alert("Customer does not exist. Please add the customer first.");
       return;
     }
 
@@ -58,24 +117,19 @@ function CreateOrder() {
         `http://localhost:3001/api/customers/by-customID/${order.customerID}`
       );
 
-      if (!customerResponse.data || !customerResponse.data._id) {
-        throw new Error("Customer not found");
-      }
-
       const customerObjectID = customerResponse.data._id;
 
-      // Format the order data using the ObjectID for the customer_ID field
       const formattedOrder = {
-        orderID: order.orderID,
         orderDate: order.orderDate,
         totalPrice: calculatedTotalPrice,
-        customer_ID: customerObjectID, // This should match your Order model field name
+        customer_ID: customerObjectID,
         orderDetails: order.items.map((item) => ({
           productName: item.productName,
           quantity: parseInt(item.quantity),
           price: parseFloat(item.price),
         })),
       };
+
       const response = await axios.post(
         "http://localhost:3001/api/orders",
         formattedOrder
@@ -111,16 +165,6 @@ function CreateOrder() {
           <h2>Create New Order</h2>
           <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <TextField
-              label="Order ID"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              name="orderID"
-              value={order.orderID}
-              onChange={handleChange}
-              required
-            />
-            <TextField
               label="Order Date"
               variant="outlined"
               fullWidth
@@ -140,6 +184,20 @@ function CreateOrder() {
               name="customerID"
               value={order.customerID}
               onChange={handleChange}
+              onBlur={handleCustomerIDBlur}
+              error={customerExists === false}
+              helperText={
+                customerExists === false
+                  ? "Customer does not exist. Please add the customer first."
+                  : customerExists === true
+                  ? "Customer exists."
+                  : ""
+              }
+              InputProps={{
+                style: {
+                  color: customerExists === true ? "green" : "inherit",
+                },
+              }}
               required
             />
 
@@ -175,9 +233,7 @@ function CreateOrder() {
                     margin="normal"
                     name="price"
                     value={item.price}
-                    onChange={(e) => handleItemChange(index, e)}
-                    InputProps={{ startAdornment: "Rs." }}
-                    required
+                    InputProps={{ readOnly: true }}
                   />
                   <Button
                     onClick={() => handleRemoveItem(index)}
@@ -189,6 +245,7 @@ function CreateOrder() {
                   </Button>
                 </Box>
               ))}
+
               <Button
                 onClick={handleAddItem}
                 variant="contained"
