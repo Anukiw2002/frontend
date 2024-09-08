@@ -9,15 +9,24 @@ function CreateOrder() {
   const drawerWidth = 280;
   const navigate = useNavigate();
 
+  // Function to get the current date in YYYY-MM-DD format
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Initialize order state with the current date
   const [order, setOrder] = useState({
-    orderID: "",
-    orderDate: "",
+    orderDate: getCurrentDate(),
     totalPrice: "",
     customerID: "",
     items: [{ productName: "", quantity: "", price: "" }],
   });
 
-  const [customerExists, setCustomerExists] = useState(null); // State to track customer existence
+  const [customerExists, setCustomerExists] = useState(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -61,7 +70,7 @@ function CreateOrder() {
       }
     } catch (error) {
       console.error("Error checking customer existence:", error.message);
-      setCustomerExists(false); // In case of an error, assume customer doesn't exist
+      setCustomerExists(false);
     }
   };
 
@@ -90,7 +99,6 @@ function CreateOrder() {
       const customerObjectID = customerResponse.data._id;
 
       const formattedOrder = {
-        orderID: order.orderID,
         orderDate: order.orderDate,
         totalPrice: calculatedTotalPrice,
         customer_ID: customerObjectID,
@@ -136,16 +144,6 @@ function CreateOrder() {
           <h2>Create New Order</h2>
           <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <TextField
-              label="Order ID"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              name="orderID"
-              value={order.orderID}
-              onChange={handleChange}
-              required
-            />
-            <TextField
               label="Order Date"
               variant="outlined"
               fullWidth
@@ -165,13 +163,20 @@ function CreateOrder() {
               name="customerID"
               value={order.customerID}
               onChange={handleChange}
-              onBlur={handleCustomerIDBlur} // Check customer existence on blur
-              error={customerExists === false} // Show error if customer doesn't exist
+              onBlur={handleCustomerIDBlur}
+              error={customerExists === false}
               helperText={
                 customerExists === false
                   ? "Customer does not exist. Please add the customer first."
+                  : customerExists === true
+                  ? "Customer exists."
                   : ""
               }
+              InputProps={{
+                style: {
+                  color: customerExists === true ? "green" : "inherit",
+                },
+              }}
               required
             />
 
