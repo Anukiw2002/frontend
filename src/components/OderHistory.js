@@ -14,27 +14,35 @@ import { useNavigate } from "react-router-dom";
 function OrderHistory() {
   const drawerWidth = 280;
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
 
-  const handleRowClick = (id) => {
-    navigate(`/orderhistory/${id}`);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/orders")
+      .then((response) => {
+        console.log("API response:", response.data);
+        setOrders(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleSeeMore = (id) => {
+    navigate(`/orderdetails/${id}`);
   };
 
-  const orders = [
-    {
-      id: 1,
-      name: "Lewis Hamilton",
-      quantity: "150",
-      date: "2024-08-01",
-      price: "$2000",
-    },
-    {
-      id: 2,
-      name: "George Russell",
-      quantity: "119",
-      date: "2024-08-02",
-      price: "$1800",
-    },
-  ];
+  const handleEdit = (id) => {
+    navigate(`/update-order/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:3001/api/orders/${id}`)
+      .then((res) => {
+        console.log(res);
+        setOrders(orders.filter((order) => order._id !== id));
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>

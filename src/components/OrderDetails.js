@@ -9,44 +9,42 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-function OrderHistory() {
-  const drawerWidth = 280;
+function OrderDetails() {
+  const { id } = useParams();
+  const [orderData, setOrderData] = useState(null);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/orders/${id}/details`)
+      .then((response) => {
+        console.log("API response:", response.data); // Log the response data
+        const order = response.data;
 
-  const [order] = useState([
-    {
-      id: 1,
-      date: "2024-08-01",
-      items: [
-        { name: "iPhone", quantity: "1", price: "$2000" },
-        { name: "MacBook", quantity: "1", price: "$1300" },
-      ],
-    },
-    {
-      id: 2,
-      date: "2024-08-02",
-      items: [
-        { name: "Samsung Galaxy", quantity: "2", price: "$1500" },
-        { name: "Dell Laptop", quantity: "1", price: "$1000" },
-      ],
-    },
-  ]);
+        // Calculate the subtotal
+        const subtotal = order.orderDetails.reduce((acc, item) => {
+          return acc + item.price * item.quantity;
+        }, 0);
 
-  const handleEdit = (orderId) => {
-    // Implement edit functionality
-    console.log(`Edit order with id: ${orderId}`);
-  };
-
-  const handleDelete = (orderId) => {
-    // Implement delete functionality
-    console.log(`Delete order with id: ${orderId}`);
-  };
+        // Update the order's totalprice with the calculated subtotal
+        if (subtotal !== order.totalprice) {
+          axios
+            .put(`http://localhost:3001/api/orders/${id}`, {
+              totalprice: subtotal,
+            })
+            .then((updateResponse) => {
+              // Set the updated order data with the correct subtotal
+              setOrderData({ ...order, totalprice: subtotal });
+            })
+            .catch((error) =>
+              console.error("Error updating order subtotal:", error)
+            );
+        } else {
+          setOrderData(order);
+        }
+      })
+      .catch((error) => console.error("Error fetching order details:", error));
+  }, [id]);
 
   return (
     <Box sx={{ backgroundColor: "lightgray" }}>
