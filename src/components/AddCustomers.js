@@ -12,9 +12,22 @@ function AddCustomer() {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [contact_number, setContactNumber] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
+
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email address");
+      return;
+    } else {
+      setEmailError("");
+    }
 
     axios
       .post("http://localhost:3001/api/customers", {
@@ -32,7 +45,6 @@ function AddCustomer() {
         setEmail("");
         setAddress("");
         setContactNumber("");
-        
       })
       .catch((err) =>
         console.error(
@@ -98,6 +110,8 @@ function AddCustomer() {
               fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={!!emailError}
+              helperText={emailError}
             />
           </Box>
           <Box sx={{ mb: 4 }}>
